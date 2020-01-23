@@ -6,6 +6,6 @@
  * @author Tolga
  *
  */
-public class EmptySymTableException {
+public class EmptySymTableException extends Exception {
 
 }

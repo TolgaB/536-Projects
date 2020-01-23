@@ -13,6 +13,7 @@ public class SymTable {
   
   SymTable() {
     //not sure if this adds an empty hashmap need to double check
+    list = new LinkedList<HashMap<String, Sym>>();
     list.add(new HashMap<String, Sym>());
   }
   

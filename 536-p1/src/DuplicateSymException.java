@@ -6,6 +6,6 @@
  * @author Tolga
  *
  */
-public class DuplicateSymException {
+public class DuplicateSymException extends Exception {
 
 }
