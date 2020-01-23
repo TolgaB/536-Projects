@@ -159,7 +159,26 @@ public class p1 {
       System.out.println("removeScope incorrectly threw an exception while testing functionality of lookupGlobal");
     }
     
+    //Tests for the removeScope method 
+    testTable = new SymTable();
+    try {
+      testTable.removeScope();
+      try {
+        testTable.removeScope();
+      } catch (EmptySymTableException ex) {
+        System.out.println("removeScope correctly threw a EmptySymTableException");
+      }
+    } catch (EmptySymTableException ex) {
+      System.out.println("removeScope incorrectly threw a EmptySymTableException");
+    }
     
-    
+    //Tests for the print method
+    testTable = new SymTable();
+    System.out.println("EXPECTED OUTPUT FOR PRINT");
+    System.out.print("\nSym Table\n");
+    System.out.println("OUTPUT FOR PRINT");
+    testTable.print();
+    System.out.println("EXPECTED OUTPUT FOR PRINT");
+    //write tests for the print with the hashmap
   }
 }
