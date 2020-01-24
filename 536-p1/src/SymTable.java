@@ -1,6 +1,16 @@
-/**
- * 
- */
+///////////////////////////////////////////////////////////////////////////////
+//
+// Title:            P1
+// Files:            P1.java, Sym.Java, SymTable.java
+// DuplicateSymException.java, EmptySymTableException.java
+// Semester:         536 Spring 2020
+//
+// Author:           Tolga Beser
+// Email:            tbeser@wisc.edu
+// CS Login:         tolga
+// Lecturer's Name:  Loris
+//
+/////////////////////////////////////////////////////////////////////////////  
 import java.util.*;
 
 /**
@@ -30,7 +40,9 @@ public class SymTable {
     } else {
       HashMap<String,Sym> newHashM = new HashMap<String,Sym>();
       newHashM.put(name, sym);
-      list.set(0, newHashM);
+     // list.set(0, newHashM);
+      //TODO: ASK IF THIS SHOULD BE SET OR ADD
+      list.add(0, newHashM);
     }
   }
   

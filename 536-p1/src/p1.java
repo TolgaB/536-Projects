@@ -1,11 +1,18 @@
-/**
- * 
- */
+import java.util.HashMap;
 
-/**
- * @author Tolga
- *
- */
+///////////////////////////////////////////////////////////////////////////////
+//
+// Title:            P1
+// Files:            P1.java, Sym.Java, SymTable.java
+// DuplicateSymException.java, EmptySymTableException.java
+// Semester:         536 Spring 2020
+//
+// Author:           Tolga Beser
+// Email:            tbeser@wisc.edu
+// CS Login:         tolga
+// Lecturer's Name:  Loris
+//
+/////////////////////////////////////////////////////////////////////////////  
 public class P1 {
   /**
    * @param args
@@ -201,21 +208,30 @@ public class P1 {
     }
     
     //Tests for the print method
-    /*
-     * 
-     * REWRITE THIS
-     * 
-     */
-    /*
+
     testTable = new SymTable();
-    System.out.println("EXPECTED OUTPUT FOR PRINT");
+    HashMap<String, Sym> emptyMap = new HashMap<>();
+    HashMap<String, Sym> nonEmptyMap = new HashMap<>();
+    nonEmptyMap.put("name", testSym);
+    
+    System.out.print("|| EXPECTED OUTPUT FOR PRINT TEST1 ||");
     System.out.print("\nSym Table\n");
-    System.out.println("OUTPUT FOR PRINT");
+    System.out.print(emptyMap.toString() +"\n\n");
+    System.out.print("|| OUTPUT FOR PRINT TEST1 ||");
     testTable.print();
-    System.out.println("EXPECTED OUTPUT FOR PRINT");
-    //write tests for the print with the hashmap
-     * 
-     */
+    
+    System.out.print("|| EXPECTED OUTPUT FOR PRINT TEST2 ||");
+    System.out.print("\nSym Table\n");
+    System.out.print(nonEmptyMap.toString() +"\n");
+    System.out.print(emptyMap.toString() + "\n\n");
+    System.out.print("|| OUTPUT FOR PRINT TEST2 ||");
+    try {
+      testTable.addDecl("name", testSym);
+      testTable.print();
+    } catch (Exception ex) {
+      failedTests = true;
+      System.out.println("addDecl falsly threw an exception when testing the toPrint method");
+    }
     
     //Tell the tester if all the tests passed without fail
     if (failedTests == false) {
