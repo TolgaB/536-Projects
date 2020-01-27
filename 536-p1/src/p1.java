@@ -13,12 +13,14 @@ import java.util.HashMap;
 // Lecturer's Name:  Loris
 //
 /////////////////////////////////////////////////////////////////////////////  
+
+/*
+ * Class for testing the implementation of Sym and SymTable
+ */
 public class P1 {
-  /**
-   * @param args
-   */
   
-  //check the functionality of Sym and SymTable including their exception handling
+  // method to check the functionality of Sym and SymTable 
+  // including their exception handling
   public static void main(String[] args) {
     boolean failedTests = false;
     
@@ -26,41 +28,49 @@ public class P1 {
      * Sym class tests
      */
     Sym testSym = new Sym("int");
+    //test to see if getType returns the correct val
     if (!testSym.getType().equals("int")) {
       failedTests = true;
-      System.out.println("The Sym class failed to return the correct given type when the getType method was called");
+      System.out.println("The Sym class failed to return the correct given typ"
+          + "e when the getType method was called");
     }
+    //test to see if toString returns the correct val
     if (!testSym.toString().equals("int")) {
       failedTests = true;
-      System.out.println("The Sym class failed to return the correct given type when the toString method was called");
+      System.out.println("The Sym class failed to return the correct given type"
+          + " when the toString method was called");
     }
     
     /*
      * SymTable class tests
      */  
-    //addDecl tests
-    //see if any exception are improperly thrown
+    //test the addDecl method and the exceptions it throws
     SymTable testTable = new SymTable();
     try {
+      //any thrown exceptions mean incorrect implementation
       testTable.addDecl("name", testSym);
     } catch (DuplicateSymException ex) {
       failedTests = true;
-      System.out.println("DuplicateSymException was incorrectly thrown during addDecl");
+      System.out.println("DuplicateSymException was incorrectly thrown during a"
+          + "ddDecl");
     } catch (EmptySymTableException ex) {
       failedTests = true;
-      System.out.println("EmptySymTableException was incorrectly thrown during addDecl");
+      System.out.println("EmptySymTableException was incorrectly thrown during "
+          + "addDecl");
     } catch (IllegalArgumentException ex) {
       failedTests = true;
-      System.out.println("IllegalArgumentException was incorrectly thrown during addDecl");
+      System.out.println("IllegalArgumentException was incorrectly thrown durin"
+          + "g addDecl");
     }
-    //check if the correct exception are thrown when given incorrect input
+    //check if exceptions are thrown when given invalid input
     testTable = new SymTable();
     try {
       //check the EmptySymTableException
       testTable.removeScope();
       try {
         testTable.addDecl("name", testSym);
-        System.out.println("addDecl failed to throw an EmptySymTableException when one occured");
+        System.out.println("addDecl failed to throw an EmptySymTableException"
+            + " when one occured");
         failedTests = true;
       } catch (EmptySymTableException ex) {
       }
@@ -68,7 +78,8 @@ public class P1 {
       testTable = new SymTable();
       try {
         testTable.addDecl(null, null);
-        System.out.println("addDecl failed to throw an IllegalArgumentException when one occured");
+        System.out.println("addDecl failed to throw an IllegalArgumentExcept"
+            + "ion when one occured");
         failedTests = true;
       } catch (IllegalArgumentException ex) {
       }
@@ -77,13 +88,15 @@ public class P1 {
       try {
         testTable.addDecl("name", testSym);
         testTable.addDecl("name", testSym);
-        System.out.println("addDecl failed to throw a DuplicateSymException when one occured");
+        System.out.println("addDecl failed to throw a DuplicateSymException w"
+            + "hen one occured");
         failedTests = true;
       } catch (DuplicateSymException ex) {
       }
     } catch (Exception ex) {
       failedTests = true;
-      System.out.println("When testing addDecl exceptions removeScope falsly threw an exception, more tests for removescope below");
+      System.out.println("When testing addDecl exceptions removeScope falsly "
+          + "threw an exception, more tests for removescope below");
     }
 
     //Tests for addScope method
@@ -93,14 +106,17 @@ public class P1 {
       testTable.addScope();
       testTable.removeScope();
       try {
+        //calls removescope when empty to trigger exception
         testTable.removeScope();
-        System.out.println("addScope failed to throw an EmptySymTableException when one occured");
+        System.out.println("addScope failed to throw an EmptySymTableE"
+            + "xception when one occured");
         failedTests = true;
       } catch (EmptySymTableException ex) {
       }
     } catch (EmptySymTableException ex) {
       failedTests = true;
-      System.out.println("When testing addScope functionality removeScope incorrectly threw an exception");
+      System.out.println("When testing addScope functionality removeS"
+          + "cope incorrectly threw an exception");
     }
     
     //Tests for the lookupLocal method (correct exception throwing tests below)
@@ -108,22 +124,27 @@ public class P1 {
     try {
       testTable.addDecl("name", testSym);
       try {
+        //call lookuplocal on the added value
         Sym retVal = testTable.lookupLocal("name");
         if (retVal == null) {
           failedTests = false;
-          System.out.println("lookupLocal returned null instead of the correct symbol");
+          System.out.println("lookupLocal returned null instead of"
+              + " the correct symbol");
         }
         if (retVal != testSym) {
           failedTests = true;
-          System.out.println("lookupLocal returned a value that was not the correct Sym");
+          System.out.println("lookupLocal returned a value that was no"
+              + "t the correct Sym");
         }
       } catch (EmptySymTableException ex) {
         failedTests = true;
-        System.out.println("lookupLocal incorrectly threw an EmptySymTableException");
+        System.out.println("lookupLocal incorrectly threw an EmptySymTa"
+            + "bleException");
       }
     } catch (EmptySymTableException|DuplicateSymException ex) {
       failedTests = true;
-      System.out.println("When testing lookupLocal functionality addDecl incorrectly threw an exception");
+      System.out.println("When testing lookupLocal functionality addDecl in"
+          + "correctly threw an exception");
     }
     //Tests to see if lookupLocal correctly throws exceptions
     testTable = new SymTable();
@@ -131,13 +152,15 @@ public class P1 {
       testTable.removeScope();
       try {
         testTable.lookupLocal("name");
-        System.out.println("lookupLocal failed to throw an EmptySymTableException when one occured");
+        System.out.println("lookupLocal failed to throw an EmptySymTableExcep"
+            + "tion when one occured");
         failedTests = true;
       } catch (EmptySymTableException ex) {
       }
     } catch (Exception ex) {
       failedTests = true;
-      System.out.println("removeScope incorrectly threw an exception while testing functionality of lookupLocal");
+      System.out.println("removeScope incorrectly threw an exception while t"
+          + "esting functionality of lookupLocal");
     }
        
     //Tests for the lookupGlobal method (correct exception throwing tests below)
@@ -146,7 +169,8 @@ public class P1 {
       testTable.addScope();
       try {
         //add multiple sym with the same name key and put an empty hashmap as buffer
-        //test to see if the program returns the first and not any given sym with the same name key
+        //test to see if the program returns the first and not any 
+        //given sym with the same name key
         testTable.addDecl("name", testSym);
         testTable.addScope();
         Sym otherSym = new Sym("string");
@@ -155,26 +179,32 @@ public class P1 {
           Sym retVal = testTable.lookupGlobal("name");
           if (retVal == null) {
             failedTests = true;
-            System.out.println("lookupGlobal returned null instead of the correct symbol");
+            System.out.println("lookupGlobal returned null instead of t"
+                + "he correct symbol");
           }
           if (retVal == testSym) {
             failedTests = true;
-            System.out.println("lookupGlobal returned a sym with the given name as key but it was not the first in the list");
+            System.out.println("lookupGlobal returned a sym with the given n"
+                + "ame as key but it was not the first in the list");
           } if (retVal != otherSym) {
             failedTests = true;
-            System.out.println("lookupGlobal returned a sym that was not the correct inserted value");
+            System.out.println("lookupGlobal returned a sym that was not the"
+                + " correct inserted value");
           }
         } catch (EmptySymTableException ex) {
           failedTests = true;
-          System.out.println("lookupGlobal incorrectly threw an EmptySymTableException");
+          System.out.println("lookupGlobal incorrectly threw an EmptySymTabl"
+              + "eException");
         }
       } catch (Exception ex) {
         failedTests = true;
-        System.out.println("addDecl incorrectly threw an exception while testing functionality of lookupGlobal");
+        System.out.println("addDecl incorrectly threw an exception while testi"
+            + "ng functionality of lookupGlobal");
       }
     } catch (Exception ex) {
       failedTests = true;
-      System.out.println("addScope incorrectly threw an exception while testing functionality of lookupGlobal");
+      System.out.println("addScope incorrectly threw an exception while testin"
+          + "g functionality of lookupGlobal");
     }
     //Tests to see if lookupGlobal correctly throws exceptions 
     //maybe automate this since the code is similar to what is above
@@ -183,13 +213,15 @@ public class P1 {
       testTable.removeScope();
       try {
         testTable.lookupGlobal("name");
-        System.out.println("lookupGlobal failed to throw an EmptySymTableException when one occured");
+        System.out.println("lookupGlobal failed to throw an EmptySymTableExcep"
+            + "tion when one occured");
         failedTests = true;
       } catch (EmptySymTableException ex) {
       }
     } catch (Exception ex) {
       failedTests = true;
-      System.out.println("removeScope incorrectly threw an exception while testing functionality of lookupGlobal");
+      System.out.println("removeScope incorrectly threw an exception while t"
+          + "esting functionality of lookupGlobal");
     }
     
     //Tests for the removeScope method 
@@ -199,12 +231,14 @@ public class P1 {
       try {
         testTable.removeScope();
         failedTests = true;
-        System.out.println("removeScope failed to throw an EmptySymTableException when one occured");
+        System.out.println("removeScope failed to throw an EmptySymTableEx"
+            + "ception when one occured");
       } catch (EmptySymTableException ex) {
       }
     } catch (EmptySymTableException ex) {
       failedTests = true;
-      System.out.println("removeScope incorrectly threw a EmptySymTableException");
+      System.out.println("removeScope incorrectly threw a EmptySymTabl"
+          + "eException");
     }
     
     //Tests for the print method
@@ -230,7 +264,8 @@ public class P1 {
       testTable.print();
     } catch (Exception ex) {
       failedTests = true;
-      System.out.println("addDecl falsly threw an exception when testing the toPrint method");
+      System.out.println("addDecl falsly threw an exception when t"
+          + "esting the toPrint method");
     }
     
     //Tell the tester if all the tests passed without fail
