@@ -38,11 +38,7 @@ public class SymTable {
     if (list.get(0).containsKey(name)) {
       throw new DuplicateSymException();
     } else {
-      HashMap<String,Sym> newHashM = new HashMap<String,Sym>();
-      newHashM.put(name, sym);
-     // list.set(0, newHashM);
-      //TODO: ASK IF THIS SHOULD BE SET OR ADD
-      list.add(0, newHashM);
+      list.get(0).put(name, sym);
     }
   }
   
