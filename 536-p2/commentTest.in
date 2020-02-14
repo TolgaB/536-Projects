@@ -1,0 +1,6 @@
+"This is a string literal"
+///This is a comment to be ignored
+"And another string literal" ///OPE A SIDE COMMENT
+##Yet another comment
+"A string literal WOW ///comment signs inside"
+##Comment that will soon be vanquished

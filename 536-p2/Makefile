@@ -39,7 +39,12 @@ test:
 	java -cp $(CP) P2 
 	diff allTokens.in allTokens.out
 	diff reservedWord.out expectedReservedWord.out
-	diff integerOverflow.out expectedIntegerOverflow.out	
+	diff integerOverflow.out expectedIntegerOverflow.out
+	diff symbolTest.out symbolTestExpected.out
+	diff commentTest.out expectedCommentTest.out
+	diff basicStringLitTest.out expectedBasicStringLitTest.out
+	diff identifierTest.out expectedIdentifierTest.out
+	diff incorrectStringTest.out expectedIncorrectStringTest.out	
 ###
 # clean up
 ###
@@ -49,3 +54,9 @@ clean:
 
 cleantest:
 	rm -f allTokens.out
+	rm -f integerOverflow.out
+	rm -f symbolTest.out
+	rm -f commentTest.out
+	rm -f basicStringListTest.out
+	rm -f identifierTest.out
+	rm -f incorrectStringTest.out

@@ -18,8 +18,114 @@ public class P2 {
         CharNum.num = 1;
         integerOverflowTest();
         CharNum.num = 1;
+        symbolTest();
+        CharNum.num = 1;
+        commentTest();
+        CharNum.num = 1;
+        basicStringLitTest();
+        CharNum.num = 1;
+        identifierTest();
+        CharNum.num = 1;
+        incorrectStringTest();
+        CharNum.num = 1;
         // ADD CALLS TO OTHER TEST METHODS HERE
     }
+    
+    private static void basicStringLitTest() throws IOException {
+      FileReader inFile = null;
+      PrintWriter outFile = null;
+      try {
+          inFile = new FileReader("basicStringLitTest.in");
+          outFile = new PrintWriter(new FileWriter("basicStringLitTest.out"));
+      } catch (FileNotFoundException ex) {
+          System.err.println("File basicStringLitTest.in not found.");
+          System.exit(-1);
+      } catch (IOException ex) {
+          System.err.println("basicStringLitTest.out cannot be opened.");
+          System.exit(-1);
+      }
+      parseSym(inFile, outFile);
+      outFile.close();
+    }
+    
+    private static void incorrectStringTest() throws IOException {
+      FileReader inFile = null;
+      PrintWriter outFile = null;
+      try {
+          inFile = new FileReader("incorrectStringTest.in");
+          outFile = new PrintWriter(new FileWriter("incorrectStringTest.out"));
+      } catch (FileNotFoundException ex) {
+          System.err.println("File incorrectStringTest.in not found.");
+          System.exit(-1);
+      } catch (IOException ex) {
+          System.err.println("incorrectStringTest.out cannot be opened.");
+          System.exit(-1);
+      }
+
+      parseSym(inFile, outFile);
+      outFile.close();
+      
+    }
+    
+    private static void identifierTest() throws IOException {
+      FileReader inFile = null;
+      PrintWriter outFile = null;
+      try {
+          inFile = new FileReader("identifierTest.in");
+          outFile = new PrintWriter(new FileWriter("identifierTest.out"));
+      } catch (FileNotFoundException ex) {
+          System.err.println("File identifierTest.in not found.");
+          System.exit(-1);
+      } catch (IOException ex) {
+          System.err.println("identifierTest.out cannot be opened.");
+          System.exit(-1);
+      }
+      parseSym(inFile, outFile);
+      outFile.close();
+    }
+    
+    private static void commentTest() throws IOException {
+      FileReader inFile = null;
+      PrintWriter outFile = null;
+      try {
+          inFile = new FileReader("commentTest.in");
+          outFile = new PrintWriter(new FileWriter("commentTest.out"));
+      } catch (FileNotFoundException ex) {
+          System.err.println("File commentTest.in not found.");
+          System.exit(-1);
+      } catch (IOException ex) {
+          System.err.println("commentTest.out cannot be opened.");
+          System.exit(-1);
+      }
+
+      parseSym(inFile, outFile);
+      outFile.close();
+      
+    }
+    
+    private static void symbolTest() throws IOException {
+      FileReader inFile = null;
+      PrintWriter outFile = null;
+      try {
+          inFile = new FileReader("symbolTest.in");
+          outFile = new PrintWriter(new FileWriter("symbolTest.out"));
+      } catch (FileNotFoundException ex) {
+          System.err.println("File symbolTest.in not found.");
+          System.exit(-1);
+      } catch (IOException ex) {
+          System.err.println("symbolTest.out cannot be opened.");
+          System.exit(-1);
+      }
+      System.out.println("TEST SHOULD GIVE INCORRECT STRING WARNINGS");
+      System.out.println("unterminated string literal ignored");
+      System.out.println("unterminated string literal ignored");
+      System.out.println("string literal with bad escaped character ignored");
+      System.out.println("unterminated string literal with bad escaped character ignored");
+      System.out.println("unterminated string literal with bad escaped character ignored");
+      
+      parseSym(inFile, outFile);
+      outFile.close();
+  }
     
     private static void integerOverflowTest() throws IOException {
         FileReader inFile = null;
@@ -35,11 +141,8 @@ public class P2 {
             System.exit(-1);
         }
         System.out.println("TEST SHOULD GIVE AN INTEGER OVERFLOW WARNING");
-        
         parseSym(inFile, outFile);
         outFile.close();
-        
-      
     }
 
     private static void reservedWordTest() throws IOException {
@@ -55,10 +158,8 @@ public class P2 {
           System.err.println("reservedWord.out cannot be opened.");
           System.exit(-1);
       }
-      
       parseSym(inFile, outFile);
       outFile.close();
-      
     }
     
     /**

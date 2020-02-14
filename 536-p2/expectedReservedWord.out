@@ -10,9 +10,3 @@ if
 else
 while
 return
-bool
-testval
-int
-testInt
-=
-5
