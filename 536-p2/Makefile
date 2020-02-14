@@ -38,7 +38,8 @@ ErrMsg.class: ErrMsg.java
 test:
 	java -cp $(CP) P2 
 	diff allTokens.in allTokens.out
-
+	diff reservedWord.out expectedReservedWord.out
+	diff integerOverflow.out expectedIntegerOverflow.out	
 ###
 # clean up
 ###
