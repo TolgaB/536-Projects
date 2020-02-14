@@ -307,6 +307,21 @@ return new Symbol(sym.EOF);
 													CharNum.num += yytext().length();
 													return s;
 												}
+
+{QUOTE}[^\\]*(\\[^nt'\"\?\\])((.)|\n)*{QUOTE} {
+												ErrMsg.warn(yyline+1, CharNum.num, "string literal with bad escaped character ignored");
+												CharNum.num += yytext().length();
+											 }
+{QUOTE}[^\\]*(\\[^nt'\"\?\\])((.)|\n)*       {
+												ErrMsg.fatal(yyline+1, CharNum.num,"unterminated string literal with bad escaped character ignored");
+												CharNum.num += yytext().length();
+											}											 
+												
+{QUOTE}((\\[nt'\"\?\\])|[^\n\"\\])*\n		{
+												ErrMsg.warn(yyline+1, CharNum.num, "unterminated string literal ignored");
+												CharNum.num = 1;
+											}										
+												
 ((///)|(##)).*\n                             {
 												CharNum.num =1;
 											 }
@@ -336,6 +351,7 @@ return new Symbol(sym.EOF);
             CharNum.num++;
             return s;
           }
+
         
 .         { ErrMsg.fatal(yyline+1, CharNum.num,
                          "ignoring illegal character: " + yytext());
