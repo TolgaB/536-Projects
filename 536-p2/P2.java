@@ -28,7 +28,28 @@ public class P2 {
         CharNum.num = 1;
         incorrectStringTest();
         CharNum.num = 1;
+        eofTests();
+        CharNum.num = 1;
         // ADD CALLS TO OTHER TEST METHODS HERE
+    }
+    
+    private static void eofTests() throws IOException {
+      FileReader inFile = null;
+      PrintWriter outFile = null;
+      try {
+          inFile = new FileReader("eof.txt");
+          outFile = new PrintWriter(new FileWriter("eof.out"));
+      } catch (FileNotFoundException ex) {
+          System.err.println("File eof.txt not found.");
+          System.exit(-1);
+      } catch (IOException ex) {
+          System.err.println("eof.out cannot be opened.");
+          System.exit(-1);
+      }
+      System.out.println("TEST SHOULD GIVE AN UNTERMINATED STRING LITERAL WARNING");
+      parseSym(inFile, outFile);
+      outFile.close();
+      
     }
     
     private static void basicStringLitTest() throws IOException {

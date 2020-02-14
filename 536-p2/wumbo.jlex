@@ -370,6 +370,11 @@ return new Symbol(sym.EOF);
 												CharNum.num = 1;
 											}
 
+{QUOTE}[^\\]*(\\[^nt'\"\?\\\n])(.)*          {
+												//This is for catching the (eof)
+												ErrMsg.fatal(yyline+1, CharNum.num,"unterminated string literal with bad escaped character ignored");
+												CharNum.num = 1;
+										}
 											        
 .         { ErrMsg.fatal(yyline+1, CharNum.num,
                          "ignoring illegal character: " + yytext());
