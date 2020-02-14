@@ -560,7 +560,13 @@ return new Symbol(sym.EOF);
 					case 17:
 						{ // NOTE: the following computation of the integer value does NOT
             //       check for overflow.  This must be modified.
-            int val = Integer.parseInt(yytext());
+            int val;
+            try {
+            	val = Integer.parseInt(yytext());
+            } catch (NumberFormatException e) {
+                ErrMsg.warn(yyline+1, CharNum.num, "integer literal too large; using max value");
+            	val = Integer.MAX_VALUE;
+            }
             Symbol s = new Symbol(sym.INTLITERAL,
                              new IntLitTokenVal(yyline+1, CharNum.num, val));
             CharNum.num += yytext().length();
