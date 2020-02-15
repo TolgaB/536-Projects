@@ -46,8 +46,27 @@ public class P2 {
           System.err.println("eof.out cannot be opened.");
           System.exit(-1);
       }
-      System.out.println("TEST SHOULD GIVE AN UNTERMINATED STRING LITERAL WARNING");
+      System.out.println("\nEXPECTED:SHOULD GIVE AN UNTERMINATED STRING LITERAL WARNING");
+      System.out.println("---------------------------------------------------------------");
       parseSym(inFile, outFile);
+      System.out.println("---------------------------------------------------------------\n");
+      
+      try {
+        inFile = new FileReader("eof2.txt");
+        outFile = new PrintWriter(new FileWriter("eof2.out"));
+      } catch (FileNotFoundException ex) {
+        System.err.println("File eof2.txt not found.");
+        System.exit(-1);
+      } catch (IOException ex) {
+        System.err.println("eof2.out cannot be opened.");
+        System.exit(-1);
+      }
+      System.out.println("EXPECTED: SHOULD GIVE AN unterminated string literal with bad escaped character ignored");
+      System.out.println("---------------------------------------------------------------");
+      parseSym(inFile, outFile);
+      System.out.println("---------------------------------------------------------------\n");
+      
+      
       outFile.close();
       
     }
@@ -137,15 +156,16 @@ public class P2 {
           System.err.println("symbolTest.out cannot be opened.");
           System.exit(-1);
       }
-      System.out.println("TEST SHOULD GIVE INCORRECT STRING WARNINGS");
-      System.out.println("unterminated string literal ignored");
-      System.out.println("unterminated string literal ignored");
-      System.out.println("string literal with bad escaped character ignored");
-      System.out.println("unterminated string literal with bad escaped character ignored");
-      System.out.println("unterminated string literal with bad escaped character ignored");
-      
+
+      System.out.println("EXPECTED: unterminated string literal ignored");
+      System.out.println("EXPECTED: unterminated string literal ignored");
+      System.out.println("EXPECTED: string literal with bad escaped character ignored");
+      System.out.println("EXPECTED: unterminated string literal with bad escaped character ignored");
+      System.out.println("EXPECTED: unterminated string literal with bad escaped character ignored");
+      System.out.println("---------------------------------------------------------------");
       parseSym(inFile, outFile);
       outFile.close();
+      
   }
     
     private static void integerOverflowTest() throws IOException {
@@ -161,8 +181,10 @@ public class P2 {
             System.err.println("integerOverflow.out cannot be opened.");
             System.exit(-1);
         }
-        System.out.println("TEST SHOULD GIVE AN INTEGER OVERFLOW WARNING");
+        System.out.println("EXPECTED: SHOULD GIVE AN INTEGER OVERFLOW WARNING");
+        System.out.println("---------------------------------------------------------------");
         parseSym(inFile, outFile);
+        System.out.println("---------------------------------------------------------------\n");
         outFile.close();
     }
 
