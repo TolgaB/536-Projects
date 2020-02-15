@@ -1,3 +1,15 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+// Title:            P2
+// Files:            P2.java, sym.Java, wumbo.jlex
+// Semester:         536 Spring 2020
+//
+// Author:           Tolga Beser
+// Email:            tbeser@wisc.edu
+// CS Login:         tolga
+// Lecturer's Name:  Loris
+//
+/////////////////////////////////////////////////////////////////////////////  
 import java.util.*;
 import java.io.*;
 import java_cup.runtime.*;  // defines Symbol
@@ -30,7 +42,9 @@ public class P2 {
         CharNum.num = 1;
         eofTests();
         CharNum.num = 1;
-        // ADD CALLS TO OTHER TEST METHODS HERE
+        testLineCharNum();
+        CharNum.num = 1;
+        
     }
     
     private static void eofTests() throws IOException {
@@ -46,7 +60,7 @@ public class P2 {
           System.err.println("eof.out cannot be opened.");
           System.exit(-1);
       }
-      System.out.println("\nEXPECTED:SHOULD GIVE AN UNTERMINATED STRING LITERAL WARNING");
+      System.out.println("\nEXPECTED(eof test):SHOULD GIVE AN UNTERMINATED STRING LITERAL WARNING");
       System.out.println("---------------------------------------------------------------");
       parseSym(inFile, outFile);
       System.out.println("---------------------------------------------------------------\n");
@@ -61,7 +75,7 @@ public class P2 {
         System.err.println("eof2.out cannot be opened.");
         System.exit(-1);
       }
-      System.out.println("EXPECTED: SHOULD GIVE AN unterminated string literal with bad escaped character ignored");
+      System.out.println("EXPECTED(eof test): SHOULD GIVE AN unterminated string literal with bad escaped character ignored");
       System.out.println("---------------------------------------------------------------");
       parseSym(inFile, outFile);
       System.out.println("---------------------------------------------------------------\n");
@@ -157,11 +171,11 @@ public class P2 {
           System.exit(-1);
       }
 
-      System.out.println("EXPECTED: unterminated string literal ignored");
-      System.out.println("EXPECTED: unterminated string literal ignored");
-      System.out.println("EXPECTED: string literal with bad escaped character ignored");
-      System.out.println("EXPECTED: unterminated string literal with bad escaped character ignored");
-      System.out.println("EXPECTED: unterminated string literal with bad escaped character ignored");
+      System.out.println("EXPECTED(symbolTest): unterminated string literal ignored");
+      System.out.println("EXPECTED(symbolTest): unterminated string literal ignored");
+      System.out.println("EXPECTED(symbolTest): string literal with bad escaped character ignored");
+      System.out.println("EXPECTED(symbolTest): unterminated string literal with bad escaped character ignored");
+      System.out.println("EXPECTED(symbolTest): unterminated string literal with bad escaped character ignored");
       System.out.println("---------------------------------------------------------------");
       parseSym(inFile, outFile);
       outFile.close();
@@ -181,7 +195,7 @@ public class P2 {
             System.err.println("integerOverflow.out cannot be opened.");
             System.exit(-1);
         }
-        System.out.println("EXPECTED: SHOULD GIVE AN INTEGER OVERFLOW WARNING");
+        System.out.println("EXPECTED(integerOverflowTest): SHOULD GIVE AN INTEGER OVERFLOW WARNING");
         System.out.println("---------------------------------------------------------------");
         parseSym(inFile, outFile);
         System.out.println("---------------------------------------------------------------\n");
@@ -232,6 +246,29 @@ public class P2 {
         parseSym(inFile, outFile);
         
         outFile.close();
+    }
+    
+    private static void testLineCharNum() throws IOException {
+      // open input and output files
+      FileReader inFile = null;
+      PrintWriter outFile = null;
+      try {
+          inFile = new FileReader("testLineCharNum.in");
+          outFile = new PrintWriter(new FileWriter("testLineCharNum.out"));
+      } catch (FileNotFoundException ex) {
+          System.err.println("File testLineCharNum.in not found.");
+          System.exit(-1);
+      } catch (IOException ex) {
+          System.err.println("testLineCharNum.out cannot be opened.");
+          System.exit(-1);
+      }
+      Yylex scanner = new Yylex(inFile);
+      Symbol token = scanner.next_token();
+      while (token.sym != sym.EOF) {
+        outFile.println(((TokenVal)token.value).linenum + ":" + ((TokenVal)token.value).charnum);
+        token = scanner.next_token();
+      }
+      outFile.close();
     }
     
     

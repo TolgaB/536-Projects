@@ -1,0 +1,7 @@
+firstId secondId
+"string literal"
+ "string literal with space start"
+intx=5;
+
+
+"new string literal" idToken

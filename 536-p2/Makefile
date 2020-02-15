@@ -44,7 +44,8 @@ test:
 	diff commentTest.out expectedCommentTest.out
 	diff basicStringLitTest.out expectedBasicStringLitTest.out
 	diff identifierTest.out expectedIdentifierTest.out
-	diff incorrectStringTest.out expectedIncorrectStringTest.out	
+	diff incorrectStringTest.out expectedIncorrectStringTest.out
+	diff testLineCharNum.out expectedTestLineCharNum.out	
 ###
 # clean up
 ###
@@ -57,6 +58,10 @@ cleantest:
 	rm -f integerOverflow.out
 	rm -f symbolTest.out
 	rm -f commentTest.out
-	rm -f basicStringListTest.out
 	rm -f identifierTest.out
 	rm -f incorrectStringTest.out
+	rm -f testLineCharNum.out
+	rm -f basicStringLitTest.out
+	rm -f eof.out
+	rm -f eof2.out
+	rm -f reservedWord.out
