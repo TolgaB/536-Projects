@@ -79,7 +79,22 @@ non terminal LinkedList       declList;
 non terminal DeclNode         decl;
 non terminal LinkedList       varDeclList;
 non terminal VarDeclNode      varDecl;
+non terminal FnDeclNode		  fnDecl;
+non terminal StructDeclNode	  structDecl;
+non terminal DeclListNode     structBody;
+non terminal FormalListNode   formals;
+non terminal FormalListNode   formalsList;
+non terminal FormalDeclNode   formalDecl;
+non terminal FnBodyNode       fnBody;
+non terminal LinkedList       stmtList;
+non terminal StmtListNode     stmt;
+non terminal AssignNode       assignExp;
+non terminal ExpNode          exp;
+non terminal ExpNod           term;
+non terminal CallExpNode      fncall;
+non terminal LinkedList       actualList;
 non terminal TypeNode         type;
+non terminal ExpNode          loc;
 non terminal IdNode           id;
 
 
@@ -146,8 +161,8 @@ structBody      ::= structBody:sB varDecl:v
 				   RESULT = sB; 
 				:}
 				| varDecl:v
-				{: 
-				  RESULT = v;
+				{: /* THIS IS PROB WRONG */
+				  RESULT = new DeclListNode(v);
 				:}
 				;
 				
@@ -155,7 +170,7 @@ formals         ::= LPAREN RPAREN
 				{: /* IDK WHAT GOES HERE */
 				:}
                 | LPAREN formalsList:fL RPAREN
-                {: RESULT = new FormalListNode(fL);
+                {: RESULT = fl;
                 :}
                 ;
                 
@@ -315,7 +330,7 @@ term            ::= loc:l
                 ;               
                 
 actualList      ::= exp:e
-				{:  RESULT = e;
+				{:  RESULT = new LinkedList<ExpNode>().add(e);
 				:}
                 | actualList:a COMMA exp:e
                 {: a.addLast(e);
