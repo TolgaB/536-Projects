@@ -77,31 +77,48 @@ terminal                ASSIGN;
 non terminal ProgramNode      program;
 non terminal LinkedList       declList;
 non terminal DeclNode         decl;
+non terminal LinkedList       varDeclList;
 non terminal VarDeclNode      varDecl;
+non terminal FnDeclNode       fnDecl;
+non terminal StructDeclNode   structDecl;
+non terminal LinkedList		  structBody;
+non terminal FormalsListNode  formals;
+non terminal LinkedList 	  formalsList;
+non terminal FormalDeclNode	  formalDecl;
+non terminal FnBodyNode		  fnBody;
+non terminal LinkedList       stmtList;
+non terminal StmtNode         stmt;
+non terminal AssignNode		  assignExp;
+non terminal ExpNode 		  exp;
+non terminal ExpNode  		  term;
+non terminal CallExpNode      fncall;
+non terminal LinkedList       actualList;
 non terminal TypeNode         type;
 non terminal ExpNode          loc;            
 non terminal IdNode           id;
-non terminal LinkedList       actualList;
-non terminal CallExpNode      fncall;
-non terminal ExpNode  		  term;
-non terminal AssignNode		  assignExp;
-non terminal ExpNode 		  exp;
-non terminal StmtNode         stmt;
-non terminal LinkedList       stmtList;
-non terminal LinkedList       varDeclList;
-non terminal FnBodyNode		  fnBody;
-non terminal FormalDeclNode	  formalDecl;
-non terminal LinkedList 	  formalsList;
-non terminal FormalsListNode  formals;
-non terminal LinkedList		  structBody;
-non terminal StructDeclNode   structDecl;
-non terminal FnDeclNode       fnDecl;
+
+
+
+
+
+
+
+
+
+
 /* Precedences
  *
  * NOTE: Add precedence and associativity declarations here.
  *
  */
-
+precedence left DOT;
+precedence right ASSIGN;
+precedence nonassoc OR;
+precedence nonassoc AND;
+precedence nonassoc LESS, GREATER, LESSEQ, GREATEREQ, EQUALS, NOTEQUALS;
+precedence left PLUS, MINUS, PLUSPLUS;
+precedence left TIMES, DIVIDE;
+precedence left MINUSMINUS, NOT;
 
 start with program;
 
@@ -112,7 +129,8 @@ start with program;
  *
  */
 program         ::= declList: d
-                {: RESULT = new ProgramNode(new DeclListNode(d));
+                {:
+                RESULT = new ProgramNode(new DeclListNode(d));
                 :}
                 ;
 
@@ -160,7 +178,7 @@ structBody      ::= structBody:sb varDecl:v
 				:}
                 | varDecl:v
                 {: LinkedList<DeclNode> temp = new LinkedList<DeclNode>();
-                   temp.add(v);
+                   temp.addLast(v);
                    RESULT = temp;
                 :}
                 ;                
@@ -235,7 +253,7 @@ stmt            ::= assignExp:a SEMICOLON
 				:}
                 | RETURN SEMICOLON
                 {: /*IDK about this*/ 
-                 
+                   RESULT = new ReturnStmtNode(null);
 				:}
                 | fncall:e SEMICOLON
                 {: RESULT = new CallStmtNode(e);
@@ -243,7 +261,8 @@ stmt            ::= assignExp:a SEMICOLON
                 ;
 
 assignExp       ::= loc:l ASSIGN exp:e
-				{: RESULT = new AssignNode(l,e);
+				{: 
+				RESULT = new AssignNode(l,e);
 				:}
                 ;
                 
@@ -322,7 +341,7 @@ term            ::= loc:l
                 ;
 
 fncall          ::=  id:i LPAREN RPAREN
-				{: RESULT = new CallExpNode(i);
+				{: RESULT = new CallExpNode(i,null);
 				:}
                 | id:i LPAREN actualList:a RPAREN  
                 {: RESULT = new CallExpNode(i,new ExpListNode(a));
@@ -352,7 +371,7 @@ type            ::= INT
                 ;
 
 loc             ::= id:i
-				{: RESULT = new CallExpNode(i);
+				{: RESULT = i;
 				:}
                 | loc:l DOT id:i
                 {: RESULT = new DotAccessExpNode(l,i);
