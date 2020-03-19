@@ -98,27 +98,22 @@ non terminal ExpNode          loc;
 non terminal IdNode           id;
 
 
-
-
-
-
-
-
-
-
 /* Precedences
  *
  * NOTE: Add precedence and associativity declarations here.
  *
  */
+ 
+ //precedence for all other binary ops?
+
 precedence left DOT;
 precedence right ASSIGN;
-precedence nonassoc OR;
-precedence nonassoc AND;
-precedence nonassoc LESS, GREATER, LESSEQ, GREATEREQ, EQUALS, NOTEQUALS;
-precedence left PLUS, MINUS, PLUSPLUS;
+precedence left OR;
+precedence left AND;
+precedence nonassoc LESS, LESSEQ, GREATER, GREATEREQ, EQUALS, NOTEQUALS;
+precedence left PLUS, MINUS;
 precedence left TIMES, DIVIDE;
-precedence left MINUSMINUS, NOT;
+precedence right NOT;
 
 start with program;
 
@@ -146,6 +141,12 @@ declList        ::= declList:dl decl:d
 decl            ::= varDecl:v
                 {: RESULT = v;
                 :}
+                | fnDecl:f
+                {: RESULT = f;
+                :}
+                | structDecl:s
+                {: RESULT = s;
+                :}
                 ;
 
 varDeclList     ::= varDeclList:vl varDecl:v
@@ -159,6 +160,9 @@ varDeclList     ::= varDeclList:vl varDecl:v
 
 varDecl         ::= type:t id:i SEMICOLON
                 {: RESULT = new VarDeclNode(t, i, VarDeclNode.NOT_STRUCT);
+                :}
+                | STRUCT id:a id:i SEMICOLON
+                {: RESULT = new VarDeclNode(new StructNode(a),i,0);
                 :}
                 ;
                
@@ -317,7 +321,7 @@ exp             ::= assignExp:a
                 ;
 
 term            ::= loc:l
-				{: /* IDK */
+				{: 
 				   RESULT = l;
 				:}
                 | INTLITERAL:i

@@ -1,18 +1,18 @@
 ###
 # This Makefile can be used to make a parser for the Wumbo language
-# (parser.class) and to make a program (P3.class) that tests the parser and
-# the unparse methods in ast.java.
+# (parser.class) and to make a program (P4.class) that tests the parser, unparse and
+# name analysis methods in ast.java.
 #
 # make clean removes all generated files.
 #
 ###
 
 JC = javac
-FLAGS = -g 
+FLAGS = -g
 CP = ./deps:.
 
-P3.class: P3.java parser.class Yylex.class ASTnode.class
-	$(JC) $(FLAGS) -cp $(CP) P3.java
+P4.class: P4.java parser.class Yylex.class ASTnode.class
+	$(JC) $(FLAGS) -cp $(CP) P4.java
 
 parser.class: parser.java ASTnode.class Yylex.class ErrMsg.class
 	$(JC) $(FLAGS) -cp $(CP) parser.java
@@ -23,7 +23,7 @@ parser.java: Wumbo.cup
 Yylex.class: Wumbo.jlex.java sym.class ErrMsg.class
 	$(JC) $(FLAGS) -cp $(CP) Wumbo.jlex.java
 
-ASTnode.class: ast.java
+ASTnode.class: ast.java SymTable.class
 	$(JC) $(FLAGS) -cp $(CP) ast.java
 
 Wumbo.jlex.java: Wumbo.jlex sym.class
@@ -38,10 +38,22 @@ sym.java: Wumbo.cup
 ErrMsg.class: ErrMsg.java
 	$(JC) $(FLAGS) -cp $(CP) ErrMsg.java
 
+Sym.class: Sym.java
+	$(JC) $(FLAGS) -cp $(CP) Sym.java
+
+SymTable.class: SymTable.java Sym.class DuplicateSymException.class EmptySymTableException.class
+	$(JC) $(FLAGS) -cp $(CP) SymTable.java
+
+DuplicateSymException.class: DuplicateSymException.java
+	$(JC) $(FLAGS) -cp $(CP) DuplicateSymException.java
+
+EmptySymTableException.class: EmptySymTableException.java
+	$(JC) $(FLAGS) -cp $(CP) EmptySymTableException.java
+
 ##test
 test:
-	java -cp $(CP) P3 test.wumbo test.out
-	diff test.out expected.out
+	java -cp $(CP) P4 nameErrors.wumbo nameErrors.out
+	java -cp $(CP) P4 test.wumbo test.out
 
 ###
 # clean
