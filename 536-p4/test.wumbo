@@ -11,6 +11,7 @@ void g() {
     int a;
     bool b;
     struct Point p;
+    struct BadStruct p;
     p.x = a;
     b = a == 3;
     f(a+p.y*2,b);
