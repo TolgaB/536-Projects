@@ -990,6 +990,7 @@ class AssignNode extends ExpNode {
     }
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+        System.out.println("name analysis for AssigNode called");
         //check for both the lhs and rhs
         myLhs.nameAnalysisNoReturn(workingSymTable);
         myExp.nameAnalysisNoReturn(workingSymTable);
