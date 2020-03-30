@@ -385,8 +385,8 @@ class FnDeclNode extends DeclNode {
         //TODO: MULTIPLE DECLARATION CHECKING FOR FUNCS
         workingSymTable.addDecl(myId.toString(), new FnSym(myType.toString(), myFormalsList.getFormalListSym()));
         workingSymTable.addScope();
-        myFormalsList.nameAnalysis(workingSymTable);
-        myBody.nameAnalysis(workingSymTable);
+        workingSymTable = myFormalsList.nameAnalysis(workingSymTable);
+        workingSymTable = myBody.nameAnalysis(workingSymTable);
         workingSymTable.removeScope();
         return workingSymTable;
     }
