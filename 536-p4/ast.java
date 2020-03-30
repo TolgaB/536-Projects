@@ -325,7 +325,7 @@ class VarDeclNode extends DeclNode {
             //check to see if it is a double declaration
             if (workingSymTable.lookupLocal(myId.getStrVal()) == null) {
                 //then its not in the symboltable
-                workingSymTable.addDecl(myId.getStrVal(), new Sym(myType.toString()));
+                workingSymTable.addDecl(myId.getStrVal(), new Sym(myType.strVal()));
             } else {
                 //not sure about returning null here prob have to throw error
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
@@ -338,13 +338,13 @@ class VarDeclNode extends DeclNode {
                 valid = false;
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
             }
-            if (workingSymTable.lookupGlobal(myType.toString()) == null) {
-                System.out.println("myType toString is :" + myType.toString());
+            if (workingSymTable.lookupGlobal(myType.strVal()) == null) {
+                System.out.println("myType toString is :" + myType.strVal()
                 valid = false;
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid name of a struct type");
             } 
             if (valid) {
-                workingSymTable.addDecl(myId.toString(), new StructSym(myType.toString()));
+                workingSymTable.addDecl(myId.toString(), new StructSym(myType.strVal()));
             }
         }
         return workingSymTable;
@@ -469,6 +469,7 @@ class StructDeclNode extends DeclNode {
 // **********************************************************************
 
 abstract class TypeNode extends ASTnode {
+    abstract public String strVal();
 }
 
 class IntNode extends TypeNode {
@@ -477,6 +478,10 @@ class IntNode extends TypeNode {
 
     public void unparse(PrintWriter p, int indent) {
         p.print("int");
+    }
+
+    public String strVal() {
+        return "int";
     }
 }
 
@@ -487,6 +492,10 @@ class BoolNode extends TypeNode {
     public void unparse(PrintWriter p, int indent) {
         p.print("bool");
     }
+
+    public String strVal() {
+        return "bool";
+    }
 }
 
 class VoidNode extends TypeNode {
@@ -495,6 +504,10 @@ class VoidNode extends TypeNode {
 
     public void unparse(PrintWriter p, int indent) {
         p.print("void");
+    }
+
+    public String strVal() {
+        return "void";
     }
 }
 
@@ -506,6 +519,10 @@ class StructNode extends TypeNode {
     public void unparse(PrintWriter p, int indent) {
         p.print("struct ");
         myId.unparse(p, 0);
+    }
+
+    public String strVal() {
+        return myId.getStrVal();
     }
 
     private IdNode myId;
