@@ -445,8 +445,10 @@ class StructDeclNode extends DeclNode {
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
         
         System.out.println("name analysis for StructDeclNode called");
+
         StructDecSym structDec = new StructDecSym("struct", myDeclList.nameAnalysis(new SymTable()));
         if (workingSymTable.lookupLocal(myId.toString()) == null) {
+            System.out.println("Struct added to symTable");
             workingSymTable.addDecl(myId.toString(), structDec);
         } else {
             //IDK WHAT TO DO ABOUT THIS
