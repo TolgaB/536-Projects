@@ -9,10 +9,9 @@ struct Point {
 int f(int x, bool b) { }
 void g() {
     int a;
-    a = 2;
     bool b;
     struct Point p;
-    struct BadStruct p;
+    a = 2;
     p.x = a;
     b = a == 3;
     f(a+p.y*2,b);
