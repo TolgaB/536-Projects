@@ -323,26 +323,27 @@ class VarDeclNode extends DeclNode {
         //first check if it is a struct
         if (mySize == NOT_STRUCT) {
             //check to see if it is a double declaration
-            if (workingSymTable.lookupLocal(myId.toString()) == null) {
+            if (workingSymTable.lookupLocal(myId.getStrVal()) == null) {
                 //then its not in the symboltable
-                workingSymTable.addDecl(myId.toString(), new Sym(myType.toString()));
+                workingSymTable.addDecl(myId.getStrVal(), new Sym(myType.toString()));
             } else {
                 //not sure about returning null here prob have to throw error
-                //TODO: fix this
-                return null;
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
+                return workingSymTable;
             }
         } else {
+            boolean valid = true;
             //check to see if double declaration
-            if (workingSymTable.lookupLocal(myId.toString()) == null) {
-                //check to see if the struct is declared globally
-                if (workingSymTable.lookupGlobal(myType.toString()) != null) {
-                    workingSymTable.addDecl(myId.toString(), new StructSym(myType.toString()));
-                } else {
-                    //it hasnt been defined 
-                    return null;
-                }
-            } else {
-                return null;
+            if (workingSymTable.lookupLocal(myId.getStrVal()) != null) {
+                valid = false;
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
+            }
+            if (workingSymTable.lookupGlobal(myType.toString()) == null) {
+                valid = false;
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid name of a struct type");
+            } 
+            if (valid) {
+                workingSymTable.addDecl(myId.toString(), new StructSym(myType.toString()));
             }
         }
         return workingSymTable;
