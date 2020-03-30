@@ -1,4 +1,6 @@
 import java.io.*;
+import java.sql.SQLException;
+import java.sql.Struct;
 import java.util.*;
 
 // **********************************************************************
@@ -115,6 +117,12 @@ abstract class ASTnode {
     protected void addIndentation(PrintWriter p, int indent) {
         for (int k = 0; k < indent; k++) p.print(" ");
     }
+
+    public SymTable nameAnalysis(SymTable workingSymTable) throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        return null;
+    }
+
+
 }
 
 // **********************************************************************
@@ -123,6 +131,7 @@ abstract class ASTnode {
 // **********************************************************************
 
 class ProgramNode extends ASTnode {
+
     public ProgramNode(DeclListNode L) {
         myDeclList = L;
     }
@@ -131,10 +140,16 @@ class ProgramNode extends ASTnode {
         myDeclList.unparse(p, indent);
     }
 
+    public SymTable nameAnalysis(SymTable workingSymTable)
+            throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        return myDeclList.nameAnalysis(workingSymTable);
+    }
+
     private DeclListNode myDeclList;
 }
 
 class DeclListNode extends ASTnode {
+
     public DeclListNode(List<DeclNode> S) {
         myDecls = S;
     }
@@ -150,6 +165,17 @@ class DeclListNode extends ASTnode {
             System.exit(-1);
         }
     }
+
+    public SymTable nameAnalysis(SymTable workingCopy)
+            throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        //create a symboltable going through the list
+        for (DeclNode temp : myDecls) {
+            //go through each DeclNode and add to the symbol table
+            workingCopy = temp.nameAnalysis(workingCopy);
+        }
+        return workingCopy;
+    }
+
 
     private List<DeclNode> myDecls;
 }
@@ -170,6 +196,22 @@ class FormalsListNode extends ASTnode {
         }
     }
 
+    public SymTable nameAnalysis(SymTable workingSymTable)
+            throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        for (FormalDeclNode tempNode : myFormals) {
+            workingSymTable = tempNode.nameAnalysis(workingSymTable);
+        }
+        return workingSymTable;
+    }
+
+    public ArrayList<Sym> getFormalListSym() {
+        ArrayList<Sym> symList = new ArrayList<Sym>();
+        for (FormalDeclNode tempNode : myFormals) {
+            symList.add(tempNode.getSymForList());
+        }
+        return symList;
+    }
+
     private List<FormalDeclNode> myFormals;
 }
 
@@ -182,6 +224,15 @@ class FnBodyNode extends ASTnode {
     public void unparse(PrintWriter p, int indent) {
         myDeclList.unparse(p, indent);
         myStmtList.unparse(p, indent);
+    }
+
+    public SymTable nameAnalysis(SymTable workingSymTable)
+            throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        //first add the DeclListNode
+        workingSymTable = myDeclList.nameAnalysis(workingSymTable);
+        //now check the stmts for errors etc
+        myStmtList.nameAnalysis(workingSymTable);
+        return workingSymTable;
     }
 
     private DeclListNode myDeclList;
@@ -198,6 +249,16 @@ class StmtListNode extends ASTnode {
         while (it.hasNext()) {
             it.next().unparse(p, indent);
         }
+    }
+
+    public SymTable nameAnalysis(SymTable workingSymTable)
+            throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        //check the declarations
+        //TODO: error checking w/ statements and stuff
+        for (StmtNode tempStmtNode: myStmts) {
+            tempStmtNode.nameAnalysisNoReturn(workingSymTable);
+        }
+        return null;
     }
 
     private List<StmtNode> myStmts;
@@ -219,6 +280,14 @@ class ExpListNode extends ASTnode {
         }
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable)
+            throws EmptySymTableException{
+        for (ExpNode tempExpNode : myExps) {
+            tempExpNode.nameAnalysisNoReturn(workingSymTable);
+        }
+    }
+
+
     private List<ExpNode> myExps;
 }
 
@@ -227,9 +296,11 @@ class ExpListNode extends ASTnode {
 // **********************************************************************
 
 abstract class DeclNode extends ASTnode {
+    abstract public SymTable nameAnalysis(SymTable workingSymTable) throws EmptySymTableException, DuplicateSymException, IllegalArgumentException;
 }
 
 class VarDeclNode extends DeclNode {
+
     public VarDeclNode(TypeNode type, IdNode id, int size) {
         myType = type;
         myId = id;
@@ -243,6 +314,36 @@ class VarDeclNode extends DeclNode {
         myId.unparse(p, 0);
         p.println(";");
     }
+
+    public SymTable nameAnalysis(SymTable workingSymTable) throws EmptySymTableException, DuplicateSymException, IllegalArgumentException {
+       //TODO: fix the null returns
+        //first check if it is a struct
+        if (mySize == NOT_STRUCT) {
+            //check to see if it is a double declaration
+            if (workingSymTable.lookupLocal(myId.toString()) == null) {
+                //then its not in the symboltable
+                workingSymTable.addDecl(myId.toString(), new Sym(myType.toString()));
+            } else {
+                //not sure about returning null here prob have to throw error
+                //TODO: fix this
+                return null;
+            }
+        } else {
+            //check to see if double declaration
+            if (workingSymTable.lookupLocal(myId.toString()) == null) {
+                //check to see if the struct is declared globally
+                if (workingSymTable.lookupGlobal(myType.toString()) != null) {
+                    workingSymTable.addDecl(myId.toString(), new StructSym(myType.toString()));
+                } else {
+                    //it hasnt been defined 
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+        return workingSymTable;
+    } 
 
     private TypeNode myType;
     private IdNode myId;
@@ -274,6 +375,19 @@ class FnDeclNode extends DeclNode {
         p.println("}\n");
     }
 
+    public SymTable nameAnalysis(SymTable workingSymTable)
+            throws IllegalArgumentException, DuplicateSymException, EmptySymTableException {
+        //generate arraylist for params
+        //still need to add to the data structure
+        //TODO: MULTIPLE DECLARATION CHECKING FOR FUNCS
+        workingSymTable.addDecl(myId.toString(), new FnSym(myType.toString(), myFormalsList.getFormalListSym()));
+        workingSymTable.addScope();
+        myFormalsList.nameAnalysis(workingSymTable);
+        myBody.nameAnalysis(workingSymTable);
+        workingSymTable.removeScope();
+        return workingSymTable;
+    }
+
     private TypeNode myType;
     private IdNode myId;
     private FormalsListNode myFormalsList;
@@ -290,6 +404,17 @@ class FormalDeclNode extends DeclNode {
         myType.unparse(p, 0);
         p.print(" ");
         myId.unparse(p, 0);
+    }
+
+    public SymTable nameAnalysis(SymTable workingSymTable)
+            throws IllegalArgumentException, DuplicateSymException, EmptySymTableException {
+        //do i need to do type checking for structs in here?
+        workingSymTable.addDecl(myId.toString(), new Sym(myType.toString()));
+        return workingSymTable;
+    }
+
+    public Sym getSymForList() {
+        return new Sym(myType.toString());
     }
 
     private TypeNode myType;
@@ -311,6 +436,18 @@ class StructDeclNode extends DeclNode {
         addIndentation(p, indent);
         p.println("};\n");
 
+    }
+
+    public SymTable nameAnalysis(SymTable workingSymTable)
+            throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        StructDecSym structDec = new StructDecSym("struct", myDeclList.nameAnalysis(new SymTable()));
+        if (workingSymTable.lookupLocal(myId.toString()) == null) {
+            workingSymTable.addDecl(myId.toString(), structDec);
+        } else {
+            //IDK WHAT TO DO ABOUT THIS
+            return null;
+        }
+        return workingSymTable;
     }
 
     private IdNode myId;
@@ -369,6 +506,8 @@ class StructNode extends TypeNode {
 // **********************************************************************
 
 abstract class StmtNode extends ASTnode {
+    abstract public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+    DuplicateSymException;
 }
 
 class AssignStmtNode extends StmtNode {
@@ -381,6 +520,12 @@ class AssignStmtNode extends StmtNode {
         myAssign.unparse(p, -1); // no parentheses
         p.println(";");
     }
+
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+    DuplicateSymException {
+        myAssign.nameAnalysis(workingSymTable);
+    }
+    
 
     private AssignNode myAssign;
 }
@@ -396,6 +541,11 @@ class PostIncStmtNode extends StmtNode {
         p.println("++;");
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+    DuplicateSymException {
+        myExp.nameAnalysis(workingSymTable);
+    }
+
     private ExpNode myExp;
 }
 
@@ -408,6 +558,11 @@ class PostDecStmtNode extends StmtNode {
         addIndentation(p, indent);
         myExp.unparse(p, 0);
         p.println("--;");
+    }
+
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+    DuplicateSymException { 
+        myExp.nameAnalysis(workingSymTable);
     }
 
     private ExpNode myExp;
@@ -425,6 +580,10 @@ class ReadStmtNode extends StmtNode {
         p.println(";");
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+    DuplicateSymException {
+        myExp.nameAnalysis(workingSymTable);
+    }
     // 1 child (actually can only be an IdNode or an ArrayExpNode)
     private ExpNode myExp;
 }
@@ -439,6 +598,11 @@ class WriteStmtNode extends StmtNode {
         p.print("cout << ");
         myExp.unparse(p, 0);
         p.println(";");
+    }
+
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+    DuplicateSymException {
+        myExp.nameAnalysis(workingSymTable);
     }
 
     private ExpNode myExp;
@@ -460,6 +624,13 @@ class IfStmtNode extends StmtNode {
         myStmtList.unparse(p, indent+4);
         addIndentation(p, indent);
         p.println("}");
+    }
+
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+    DuplicateSymException {
+        myExp.nameAnalysis(workingSymTable);
+        myDeclList.nameAnalysis(workingSymTable);
+        myStmtList.nameAnalysis(workingSymTable);
     }
 
     private ExpNode myExp;
@@ -495,6 +666,15 @@ class IfElseStmtNode extends StmtNode {
         p.println("}");
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+            DuplicateSymException {
+        myExp.nameAnalysis(workingSymTable);
+        myThenDeclList.nameAnalysis(workingSymTable);
+        myThenStmtList.nameAnalysis(workingSymTable);
+        myElseStmtList.nameAnalysis(workingSymTable);
+        myElseDeclList.nameAnalysis(workingSymTable);
+    }
+
     private ExpNode myExp;
     private DeclListNode myThenDeclList;
     private StmtListNode myThenStmtList;
@@ -520,6 +700,13 @@ class WhileStmtNode extends StmtNode {
         p.println("}");
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+            DuplicateSymException {
+        myExp.nameAnalysis(workingSymTable);
+        myDeclList.nameAnalysis(workingSymTable);
+        myStmtList.nameAnalysis(workingSymTable);
+    }
+
     private ExpNode myExp;
     private DeclListNode myDeclList;
     private StmtListNode myStmtList;
@@ -543,6 +730,13 @@ class RepeatStmtNode extends StmtNode {
         p.println("}");
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+            DuplicateSymException {
+        myExp.nameAnalysis(workingSymTable);
+        myDeclList.nameAnalysis(workingSymTable);
+        myStmtList.nameAnalysis(workingSymTable);
+    }
+
     private ExpNode myExp;
     private DeclListNode myDeclList;
     private StmtListNode myStmtList;
@@ -559,6 +753,10 @@ class CallStmtNode extends StmtNode {
         p.println(";");
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+            DuplicateSymException {
+        myCall.nameAnalysis(workingSymTable);
+    }
     private CallExpNode myCall;
 }
 
@@ -577,6 +775,11 @@ class ReturnStmtNode extends StmtNode {
         p.println(";");
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
+            DuplicateSymException {
+        myExp.nameAnalysis(workingSymTable);
+    }
+
     private ExpNode myExp; // possibly null
 }
 
@@ -585,6 +788,8 @@ class ReturnStmtNode extends StmtNode {
 // **********************************************************************
 
 abstract class ExpNode extends ASTnode {
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+    }
 }
 
 class IntLitNode extends ExpNode {
@@ -598,6 +803,7 @@ class IntLitNode extends ExpNode {
         p.print(myIntVal);
     }
 
+    
     private int myLineNum;
     private int myCharNum;
     private int myIntVal;
@@ -614,6 +820,7 @@ class StringLitNode extends ExpNode {
         p.print(myStrVal);
     }
 
+
     private int myLineNum;
     private int myCharNum;
     private String myStrVal;
@@ -629,6 +836,7 @@ class TrueNode extends ExpNode {
         p.print("true");
     }
 
+
     private int myLineNum;
     private int myCharNum;
 }
@@ -643,21 +851,47 @@ class FalseNode extends ExpNode {
         p.print("false");
     }
 
+
     private int myLineNum;
     private int myCharNum;
 }
 
 class IdNode extends ExpNode {
+    //gonna have to have a field of type sym 
+
     public IdNode(int lineNum, int charNum, String strVal) {
         myLineNum = lineNum;
         myCharNum = charNum;
         myStrVal = strVal;
+        
     }
 
     public void unparse(PrintWriter p, int indent) {
         p.print(myStrVal);
     }
 
+    //need to do name analysis
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+        idSym = workingSymTable.lookupGlobal(myStrVal);
+        if (idSym == null) {
+            //found
+            (new ErrMsg()).fatal(myLineNum, myCharNum, "Undeclared Identifier");
+        } 
+    }
+
+    public Sym getSym() {
+        return idSym;
+    }
+
+    public int getLineNum() {
+        return myLineNum;
+    }
+
+    public int getCharNum() {
+        return myCharNum;
+    }
+
+    private Sym idSym;
     private int myLineNum;
     private int myCharNum;
     private String myStrVal;
@@ -676,6 +910,25 @@ class DotAccessExpNode extends ExpNode {
         myId.unparse(p, 0);
     }
 
+    //need to do name analysis
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+        //check to see if the id exists in the symbol table
+        /*
+        myId.nameAnalysis(workingSymTable);
+        //check to see if it is a struct
+        Sym idSym = myId.getSym();
+        if (idSym != null) {
+            //if not a valid struct type
+            if (!idSym.structType()) {
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Dot-access of non-struct type");
+            } else {
+
+            }
+        }
+        */
+        //need to rewrite for myLoc and myId fuck this
+    }
+
     private ExpNode myLoc;
     private IdNode myId;
 }
@@ -692,6 +945,12 @@ class AssignNode extends ExpNode {
         p.print(" = ");
         myExp.unparse(p, 0);
         if (indent != -1)  p.print(")");
+    }
+
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+        //check for both the lhs and rhs
+        myLhs.nameAnalysisNoReturn(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
     }
 
     private ExpNode myLhs;
@@ -718,6 +977,13 @@ class CallExpNode extends ExpNode {
         p.print(")");
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+        //check if the function exists
+        myId.nameAnalysisNoReturn(workingSymTable);
+        //check the functions expressions
+        myExpList.nameAnalysisNoReturn(workingSymTable);
+    }
+
     private IdNode myId;
     private ExpListNode myExpList;  // possibly null
 }
@@ -727,6 +993,9 @@ abstract class UnaryExpNode extends ExpNode {
         myExp = exp;
     }
 
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+        myExp.nameAnalysisNoReturn(workingSymTable);
+    } 
     protected ExpNode myExp;
 }
 
@@ -734,6 +1003,11 @@ abstract class BinaryExpNode extends ExpNode {
     public BinaryExpNode(ExpNode exp1, ExpNode exp2) {
         myExp1 = exp1;
         myExp2 = exp2;
+    }
+
+    public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+        myExp1.nameAnalysisNoReturn(workingSymTable);
+        myExp2.nameAnalysisNoReturn(workingSymTable);
     }
 
     protected ExpNode myExp1;
