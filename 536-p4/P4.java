@@ -56,7 +56,11 @@ public class P4 {
 
 	    // ADD NAME ANALYSIS PART HERE
         ((ASTnode)root.value).unparse(outFile, 0);
+        try {
         ((ASTnode)root.value).nameAnalysis(new SymTable());
+        } catch (Exception e) {
+            System.out.println("ope");
+        }
         outFile.close();
 
         return;
