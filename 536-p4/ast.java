@@ -452,7 +452,8 @@ class StructDeclNode extends DeclNode {
             workingSymTable.addDecl(myId.toString(), structDec);
         } else {
             //IDK WHAT TO DO ABOUT THIS
-            return null;
+            (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
+            return workingSymTable;
         }
         return workingSymTable;
     }

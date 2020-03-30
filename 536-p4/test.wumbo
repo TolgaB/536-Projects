@@ -2,6 +2,10 @@ struct Point {
     int x;
     int y;
 };
+struct Point {
+    int x;
+    int y;
+};
 int f(int x, bool b) { }
 void g() {
     int a;
