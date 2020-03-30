@@ -9,6 +9,7 @@ struct Point {
 int f(int x, bool b) { }
 void g() {
     int a;
+    a = 2;
     bool b;
     struct Point p;
     struct BadStruct p;
