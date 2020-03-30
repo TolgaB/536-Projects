@@ -339,7 +339,7 @@ class VarDeclNode extends DeclNode {
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
             }
             if (workingSymTable.lookupGlobal(myType.strVal()) == null) {
-                System.out.println("myType toString is :" + myType.strVal()
+                System.out.println("myType toString is :" + myType.strVal());
                 valid = false;
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid name of a struct type");
             } 
