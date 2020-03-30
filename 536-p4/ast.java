@@ -447,9 +447,9 @@ class StructDeclNode extends DeclNode {
         System.out.println("name analysis for StructDeclNode called");
 
         StructDecSym structDec = new StructDecSym("struct", myDeclList.nameAnalysis(new SymTable()));
-        if (workingSymTable.lookupLocal(myId.toString()) == null) {
+        if (workingSymTable.lookupLocal(myId.getStrVal()) == null) {
             System.out.println("Struct added to symTable");
-            workingSymTable.addDecl(myId.toString(), structDec);
+            workingSymTable.addDecl(myId.getStrVal(), structDec);
         } else {
             //IDK WHAT TO DO ABOUT THIS
             (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
@@ -903,6 +903,10 @@ class IdNode extends ExpNode {
 
     public int getCharNum() {
         return myCharNum;
+    }
+
+    public String getStrVal() {
+        return myStrVal;
     }
 
     private Sym idSym;
