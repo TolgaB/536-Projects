@@ -54,13 +54,15 @@ public class P4 {
             System.exit(-1);
         }
 
-	    // ADD NAME ANALYSIS PART HERE
-        ((ASTnode)root.value).unparse(outFile, 0);
+        // ADD NAME ANALYSIS PART HERE
         try {
-        ((ASTnode)root.value).nameAnalysis(new SymTable());
+            ((ASTnode)root.value).nameAnalysis(new SymTable());
         } catch (Exception e) {
-            System.out.println("ope");
+                System.out.println("ope");
         }
+
+        ((ASTnode)root.value).unparse(outFile, 0);
+       
         outFile.close();
 
         return;
