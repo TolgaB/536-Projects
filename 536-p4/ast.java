@@ -385,7 +385,7 @@ class FnDeclNode extends DeclNode {
         //generate arraylist for params
         //still need to add to the data structure
         //TODO: MULTIPLE DECLARATION CHECKING FOR FUNCS
-        workingSymTable.addDecl(myId.toString(), new FnSym(myType.toString(), myFormalsList.getFormalListSym()));
+        workingSymTable.addDecl(myId.toString(), new FnSym(myType.strVal(), myFormalsList.getFormalListSym()));
         workingSymTable.addScope();
         workingSymTable = myFormalsList.nameAnalysis(workingSymTable);
         workingSymTable = myBody.nameAnalysis(workingSymTable);
@@ -413,8 +413,12 @@ class FormalDeclNode extends DeclNode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, DuplicateSymException, EmptySymTableException {
-        //do i need to do type checking for structs in here?
-        workingSymTable.addDecl(myId.toString(), new Sym(myType.toString()));
+        //Check to make sure that it isnt already defined
+        if (workingSymTable.lookupLocal(myId.toString()) != null) {
+            (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
+            return workingSymTable;
+        }
+        workingSymTable.addDecl(myId.toString(), new Sym(myType.strVal()));
         return workingSymTable;
     }
 
