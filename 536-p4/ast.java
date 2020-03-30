@@ -867,7 +867,11 @@ class IdNode extends ExpNode {
     }
 
     public void unparse(PrintWriter p, int indent) {
-        p.print(myStrVal + "(" + idSym.getType() + ")");
+        if (idSym == null) {
+            p.print(myStrVal);
+        }else {
+            p.print(myStrVal + "(" + idSym.getType() + ")");
+        }
     }
 
     //need to do name analysis
