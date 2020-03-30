@@ -256,6 +256,7 @@ class StmtListNode extends ASTnode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        System.out.println("StmtListNode nameAnalysis called");
         //check the declarations
         //TODO: error checking w/ statements and stuff
         for (StmtNode tempStmtNode: myStmts) {
