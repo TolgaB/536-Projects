@@ -877,7 +877,9 @@ class IdNode extends ExpNode {
     //need to do name analysis
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
         idSym = workingSymTable.lookupGlobal(myStrVal);
+        System.out.println("looking at :" + myStrVal);
         if (idSym == null) {
+            System.out.println("not found in symbol table: " + myStrVal);
             //found
             (new ErrMsg()).fatal(myLineNum, myCharNum, "Undeclared Identifier");
         } 
