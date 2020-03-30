@@ -262,7 +262,7 @@ class StmtListNode extends ASTnode {
         for (StmtNode tempStmtNode: myStmts) {
             tempStmtNode.nameAnalysisNoReturn(workingSymTable);
         }
-        return null;
+        return workingSymTable;
     }
 
     private List<StmtNode> myStmts;
@@ -555,7 +555,7 @@ class AssignStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
     DuplicateSymException {
-        myAssign.nameAnalysis(workingSymTable);
+        myAssign.nameAnalysisNoReturn(workingSymTable);
     }
     
 
@@ -575,7 +575,7 @@ class PostIncStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
     DuplicateSymException {
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
     }
 
     private ExpNode myExp;
@@ -594,7 +594,7 @@ class PostDecStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
     DuplicateSymException { 
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
     }
 
     private ExpNode myExp;
@@ -614,7 +614,7 @@ class ReadStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
     DuplicateSymException {
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
     }
     // 1 child (actually can only be an IdNode or an ArrayExpNode)
     private ExpNode myExp;
@@ -634,7 +634,7 @@ class WriteStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
     DuplicateSymException {
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
     }
 
     private ExpNode myExp;
@@ -660,7 +660,7 @@ class IfStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
     DuplicateSymException {
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
         myDeclList.nameAnalysis(workingSymTable);
         myStmtList.nameAnalysis(workingSymTable);
     }
@@ -700,7 +700,7 @@ class IfElseStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
             DuplicateSymException {
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
         myThenDeclList.nameAnalysis(workingSymTable);
         myThenStmtList.nameAnalysis(workingSymTable);
         myElseStmtList.nameAnalysis(workingSymTable);
@@ -734,7 +734,7 @@ class WhileStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
             DuplicateSymException {
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
         myDeclList.nameAnalysis(workingSymTable);
         myStmtList.nameAnalysis(workingSymTable);
     }
@@ -764,7 +764,7 @@ class RepeatStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
             DuplicateSymException {
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
         myDeclList.nameAnalysis(workingSymTable);
         myStmtList.nameAnalysis(workingSymTable);
     }
@@ -787,7 +787,7 @@ class CallStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
             DuplicateSymException {
-        myCall.nameAnalysis(workingSymTable);
+        myCall.nameAnalysisNoReturn(workingSymTable);
     }
     private CallExpNode myCall;
 }
@@ -809,7 +809,7 @@ class ReturnStmtNode extends StmtNode {
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
             DuplicateSymException {
-        myExp.nameAnalysis(workingSymTable);
+        myExp.nameAnalysisNoReturn(workingSymTable);
     }
 
     private ExpNode myExp; // possibly null
