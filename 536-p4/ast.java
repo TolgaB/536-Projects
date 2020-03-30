@@ -142,6 +142,7 @@ class ProgramNode extends ASTnode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        System.out.println("ProgramNode name analysis called");
         return myDeclList.nameAnalysis(workingSymTable);
     }
 
@@ -168,6 +169,8 @@ class DeclListNode extends ASTnode {
 
     public SymTable nameAnalysis(SymTable workingCopy)
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
+        
+        System.out.println("DeclListNode name analysis called");
         //create a symboltable going through the list
         for (DeclNode temp : myDecls) {
             //go through each DeclNode and add to the symbol table
