@@ -18,6 +18,10 @@ public class Sym {
     public boolean isStruct() {
         return false;
     }
+
+    public boolean isStructDecSym() {
+        return false;
+    }
 }
 
 class FnSym extends Sym {
@@ -43,6 +47,10 @@ class StructDecSym extends Sym {
 
     public SymTable getFields() {
         return fields;
+    }
+
+    public boolean isStructDecSym() {
+        return true;
     }
 
 }
