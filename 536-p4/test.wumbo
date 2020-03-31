@@ -30,18 +30,18 @@ int otherFunc(int x, bool c) {
 }
 //check the if else statements and their scoping
 int otherChecks() {
-    int x = 3;
-    int y = 5;
+    int x;
+    int y;
     bool test = true;
     if (y == 5) {
-        int x = 2;
-        int y = 3;
+        int x;
+        int y;
     } else {
-        int x = 2;
-        int y = 3;
+        int x;
+        int y;
     }
     while (test) {
-        int x = 2;
-        int y = 3;
+        int x;
+        int y;
     }
 }
