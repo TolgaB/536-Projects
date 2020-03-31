@@ -319,15 +319,23 @@ class VarDeclNode extends DeclNode {
        //TODO: fix the null returns
         //first check if it is a struct
         if (mySize == NOT_STRUCT) {
-            //check to see if it is a double declaration
-            if (workingSymTable.lookupLocal(myId.getStrVal()) == null) {
-                //then its not in the symboltable
-                workingSymTable.addDecl(myId.getStrVal(), new Sym(myType.strVal()));
-            } else {
-                //not sure about returning null here prob have to throw error
-                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
-                return workingSymTable;
+            boolean valid = true;
+            //check to see if it is a variable of type void
+            if (myType.strVal().equals("void")) {
+                valid = false;
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Non-function declared void");
             }
+            //check to see if it is a double declaration
+            if (workingSymTable.lookupLocal(myId.getStrVal()) != null) {
+                //means that it is a double declaration
+                valid = false;
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
+            } 
+            //if no problems with the declaration then add it
+            if (valid) {
+                workingSymTable.addDecl(myId.getStrVal(), new Sym(myType.strVal()));
+            }
+            return workingSymTable;
         } else {
             boolean valid = true;
             //check to see if double declaration
