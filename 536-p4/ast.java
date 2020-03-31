@@ -987,7 +987,7 @@ class DotAccessExpNode extends ExpNode {
                     if (fieldSym != null) {
                         myId.setStym(fieldSym);
                     } else {
-                        (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
+                        (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
                     }
                 }      
             } 
