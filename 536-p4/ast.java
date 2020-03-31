@@ -917,7 +917,7 @@ class IdNode extends ExpNode {
                        p.print(",");
                    }
                }
-               p.print("->" + idSym.getType());
+               p.print("->" + idSym.getType() + ")");
             } else {
                 p.print(myStrVal + "(" + idSym.getType() + ")");
             }
