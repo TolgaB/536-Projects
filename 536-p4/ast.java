@@ -417,12 +417,20 @@ class FormalDeclNode extends DeclNode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, DuplicateSymException, EmptySymTableException {
+        boolean valid = true;
+        //check to make sure that it isnt a bad declaration (void)
+        if (myType.strVal().equals("void")) {
+            valid = false;
+            (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Non-function declared void");
+        }
         //Check to make sure that it isnt already defined
         if (workingSymTable.lookupLocal(myId.getStrVal()) != null) {
+            valid = false;
             (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
-            return workingSymTable;
+        } 
+        if (valid) {
+            workingSymTable.addDecl(myId.getStrVal(), new Sym(myType.strVal()));
         }
-        workingSymTable.addDecl(myId.getStrVal(), new Sym(myType.strVal()));
         return workingSymTable;
     }
 
@@ -453,14 +461,11 @@ class StructDeclNode extends DeclNode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
-
         StructDecSym structDec = new StructDecSym("struct", myDeclList.nameAnalysis(new SymTable()));
         if (workingSymTable.lookupLocal(myId.getStrVal()) == null) {
             workingSymTable.addDecl(myId.getStrVal(), structDec);
         } else {
-            //IDK WHAT TO DO ABOUT THIS
             (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
-            return workingSymTable;
         }
         return workingSymTable;
     }
