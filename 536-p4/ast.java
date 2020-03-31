@@ -386,14 +386,20 @@ class FnDeclNode extends DeclNode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, DuplicateSymException, EmptySymTableException {
-        //generate arraylist for params
-        //still need to add to the data structure
-        //TODO: MULTIPLE DECLARATION CHECKING FOR FUNCS
-        workingSymTable.addDecl(myId.getStrVal(), new FnSym(myType.strVal(), myFormalsList.getFormalListSym()));
-        workingSymTable.addScope();
-        workingSymTable = myFormalsList.nameAnalysis(workingSymTable);
-        workingSymTable = myBody.nameAnalysis(workingSymTable);
-        workingSymTable.removeScope();
+        //Check for multiple declarations
+        if (workingSymTable.lookupLocal(myId.getStrVal()) != null) {
+            //process the stuff inside without adding to the symtable
+            workingSymTable.addScope();
+            myFormalsList.nameAnalysis(workingSymTable);
+            myBody.nameAnalysis(workingSymTable);
+            workingSymTable.removeScope();
+        } else {
+            workingSymTable.addDecl(myId.getStrVal(), new FnSym(myType.strVal(), myFormalsList.getFormalListSym()));
+            workingSymTable.addScope();
+            workingSymTable = myFormalsList.nameAnalysis(workingSymTable);
+            workingSymTable = myBody.nameAnalysis(workingSymTable);
+            workingSymTable.removeScope();
+        }
         return workingSymTable;
     }
 
@@ -666,8 +672,10 @@ class IfStmtNode extends StmtNode {
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
     DuplicateSymException {
         myExp.nameAnalysisNoReturn(workingSymTable);
+        workingSymTable.addScope();
         myDeclList.nameAnalysis(workingSymTable);
         myStmtList.nameAnalysis(workingSymTable);
+        workingSymTable.removeScope();
     }
 
     private ExpNode myExp;
@@ -706,10 +714,14 @@ class IfElseStmtNode extends StmtNode {
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
             DuplicateSymException {
         myExp.nameAnalysisNoReturn(workingSymTable);
+        workingSymTable.addScope();
         myThenDeclList.nameAnalysis(workingSymTable);
         myThenStmtList.nameAnalysis(workingSymTable);
+        workingSymTable.removeScope();
+        workingSymTable.addScope();
         myElseStmtList.nameAnalysis(workingSymTable);
         myElseDeclList.nameAnalysis(workingSymTable);
+        workingSymTable.removeScope();
     }
 
     private ExpNode myExp;
@@ -740,8 +752,10 @@ class WhileStmtNode extends StmtNode {
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException, IllegalArgumentException,
             DuplicateSymException {
         myExp.nameAnalysisNoReturn(workingSymTable);
+        workingSymTable.addScope();
         myDeclList.nameAnalysis(workingSymTable);
         myStmtList.nameAnalysis(workingSymTable);
+        workingSymTable.addScope();
     }
 
     private ExpNode myExp;
@@ -991,7 +1005,6 @@ class DotAccessExpNode extends ExpNode {
             if (!tempLocSym.isStruct()) {
                 //if its a bad struct type then it must also have an invalid struct field name
                 (new ErrMsg()).fatal(myLoc.getLineNum(), myLoc.getCharNum(), "Dot-access of non-struct type");
-                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
             } else {
                 //make sure that the accessing field is in the struct
                 Sym tempStructDecSym = workingSymTable.lookupGlobal(tempLocSym.getType());
@@ -1006,7 +1019,6 @@ class DotAccessExpNode extends ExpNode {
             } 
         } else {
             (new ErrMsg()).fatal(myLoc.getLineNum(), myLoc.getCharNum(), "Dot-access of non-struct type");
-            (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
         }
     }
 
