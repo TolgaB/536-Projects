@@ -939,6 +939,10 @@ class IdNode extends ExpNode {
         return idSym;
     }
 
+    public void setStym(Sym idSym) {
+        this.idSym = idSym;
+    }
+
     public int getLineNum() {
         return myLineNum;
     }
@@ -974,7 +978,6 @@ class DotAccessExpNode extends ExpNode {
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
         //need to use myLoc to find the struct 
         myLoc.nameAnalysisNoReturn(workingSymTable);
-        boolean valid = false;;
         Sym tempLocSym = myLoc.getSym();
         if (tempLocSym != null) {
             //make sure that the accessor is a struct
@@ -986,7 +989,7 @@ class DotAccessExpNode extends ExpNode {
                 if (tempStructDecSym.isStructDecSym()) {
                     Sym fieldSym = ((StructDecSym) tempStructDecSym).getFields().lookupLocal(myId.getStrVal());
                     if (fieldSym != null) {
-                        valid = true;
+                        myId.setStym(fieldSym);
                     } else {
                         (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
                     }
