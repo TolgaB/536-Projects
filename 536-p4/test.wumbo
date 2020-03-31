@@ -7,8 +7,9 @@ int Point() {}
 struct Rectangle {
     int width;
     int height;
-    boolean created;
+    bool created;
 };
+//various given checks to see if the unparse method works for vars and functions
 int f(int x, bool b) { }
 void g() {
     int a;
@@ -19,9 +20,28 @@ void g() {
     f(a + p.y*2, b);
     g();
 }
+//test a function using a struct declared above
+//helps check to see if struct unparsing works
 int otherFunc(int x, bool c) {
     struct Rectangle tempRec;
-    rec.width = 5;
-    rec.height = 5;
-    rec.created = true;
+    tempRec.width = 5;
+    tempRec.height = 5;
+    tempRec.created = true;
+}
+//check the if else statements and their scoping
+int otherChecks() {
+    int x = 3;
+    int y = 5;
+    bool test = true;
+    if (y == 5) {
+        int x = 2;
+        int y = 3;
+    } else {
+        int x = 2;
+        int y = 3;
+    }
+    while (test) {
+        int x = 2;
+        int y = 3;
+    }
 }
