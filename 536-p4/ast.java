@@ -812,13 +812,17 @@ class ReturnStmtNode extends StmtNode {
 // **********************************************************************
 
 abstract class ExpNode extends ASTnode {
-    int myLineNum;
-    int myCharNum;
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
     }
     //need this for dot access
     public Sym getSym(){
         return null;
+    }
+    public int getLineNum() {
+        return 0;
+    }
+    public int getCharNum() {
+        return 0;
     }
 }
 
@@ -973,7 +977,7 @@ class DotAccessExpNode extends ExpNode {
             //make sure that the accessor is a struct
             if (!tempLocSym.isStruct()) {
                 //if its a bad struct type then it must also have an invalid struct field name
-                (new ErrMsg()).fatal(myLoc.myLineNum, myLoc.myCharNum, "Dot-access of non-struct type");
+                (new ErrMsg()).fatal(myLoc.getLineNum(), myLoc.getCharNum(), "Dot-access of non-struct type");
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
             } else {
                 //make sure that the accessing field is in the struct
@@ -988,7 +992,7 @@ class DotAccessExpNode extends ExpNode {
                 }      
             } 
         } else {
-            (new ErrMsg()).fatal(myLoc.myLineNum, myLoc.myCharNum, "Dot-access of non-struct type");
+            (new ErrMsg()).fatal(myLoc.getLineNum(), myLoc.getCharNum(), "Dot-access of non-struct type");
             (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
         }
     }
