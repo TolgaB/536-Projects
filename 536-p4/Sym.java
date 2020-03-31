@@ -22,6 +22,10 @@ public class Sym {
     public boolean isStructDecSym() {
         return false;
     }
+
+    public boolean isFnSym() {
+        return false;
+    }
 }
 
 class FnSym extends Sym {
@@ -35,6 +39,9 @@ class FnSym extends Sym {
         return fields;
     }
 
+    public boolean isFnSym() {
+        return true;
+    }
 }
 
 class StructDecSym extends Sym {

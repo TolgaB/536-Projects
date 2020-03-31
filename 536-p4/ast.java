@@ -908,7 +908,19 @@ class IdNode extends ExpNode {
         if (idSym == null) {
             p.print(myStrVal);
         }else {
-            p.print(myStrVal + "(" + idSym.getType() + ")");
+            if (idSym.isFnSym()) {
+                p.print(myStrVal + "(");
+               ArrayList<Sym> tempFieldsList = ((FnSym) idSym).getFields();
+               for (int i = 0; i < tempFieldsList.size(); i++) {
+                   p.print(tempFieldsList.get(i).getType());
+                   if ((i+1) < tempFieldsList.size()) {
+                       p.print(",");
+                   }
+               }
+               p.print("->" + idSym.getType());
+            } else {
+                p.print(myStrVal + "(" + idSym.getType() + ")");
+            }
         }
     }
 
