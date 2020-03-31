@@ -55,7 +55,7 @@ test:
 	cat nameErrorsExpected.wumbo
 	java -cp $(CP) P4 nameErrors.wumbo nameErrors.out
 	java -cp $(CP) P4 test.wumbo test.out
-	diff test.out expectedTest.out
+	diff test.out expectedtest.wumbo
 
 ###
 # clean
