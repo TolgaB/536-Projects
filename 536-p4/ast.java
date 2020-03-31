@@ -986,7 +986,10 @@ class DotAccessExpNode extends ExpNode {
                         (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
                     }
                 }      
-        } 
+            } 
+        } else {
+            (new ErrMsg()).fatal(myLoc.myLineNum, myLoc.myCharNum, "Dot-access of non-struct type");
+            (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
         }
     }
 
