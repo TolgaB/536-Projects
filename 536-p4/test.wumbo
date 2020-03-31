@@ -2,18 +2,26 @@ struct Point {
     int x;
     int y;
 };
-struct Point {
-    int x;
-    int y;
+//test a function with same name as struct
+int Point() {}
+struct Rectangle {
+    int width;
+    int height;
+    boolean created;
 };
 int f(int x, bool b) { }
 void g() {
     int a;
     bool b;
     struct Point p;
-    a = 2;
     p.x = a;
     b = a == 3;
-    f(a+p.y*2,b);
+    f(a + p.y*2, b);
     g();
+}
+int otherFunc(int x, bool c) {
+    struct Rectangle tempRec;
+    rec.width = 5;
+    rec.height = 5;
+    rec.created = true;
 }
