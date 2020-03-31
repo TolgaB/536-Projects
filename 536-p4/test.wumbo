@@ -32,7 +32,7 @@ int otherFunc(int x, bool c) {
 int otherChecks() {
     int x;
     int y;
-    bool test = true;
+    bool test;
     if (y == 5) {
         int x;
         int y;
