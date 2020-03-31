@@ -50,3 +50,11 @@ int otherChecks() {
     }
 }
 
+int sameName() {
+    int sameName;
+}
+
+struct otherSame{
+    int otherSame;
+};
+

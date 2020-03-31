@@ -45,3 +45,13 @@ int otherChecks() {
         int y;
     }
 }
+
+//check func with same name as its locals
+int sameName() {
+	int sameName;
+}
+
+//check struct with same name as its locals
+struct otherSame {
+	int otherSame;
+};

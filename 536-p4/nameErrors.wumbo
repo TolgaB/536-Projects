@@ -1,0 +1,61 @@
+//Multiply declared identifier error
+struct Point {
+	int x;
+	int y;
+};
+struct Point {
+	int x;
+	int y;
+};
+
+//Multiply declared identifier in function error
+int f() {
+	int x;
+	int x;
+}
+
+//Undeclared identifier in function error
+int g() {
+	a = 2;
+}
+
+//Non-function declared void errors (one for param one for inside)
+int nonFunc(void a) {
+	void b;
+}
+
+//Invalid struct field name error and dot access of non struct type
+int structErr() {
+	int y;
+	struct Point temp;
+	temp.c = 2;
+	y.c = 3;
+}
+
+//Invalid name of struct type error
+int structTypeErr() {
+	struct Bad hi;
+}
+
+int advancedFuncErr() {}
+
+//Function with name thats multiple declared but needs to also throw errors inside the functions
+int advancedFuncErr() {
+	int x;
+	int x;
+}
+
+//Function with a formal parameter and local variable that have the same name
+int anotherFuncErr(int x) {
+	int x;
+}
+
+//Function with two params with same name
+int yetAnotherFunc(int x, int x) {}
+
+//Struct with a variable thats the same name as another var in the struct
+struct AdvancedStruct {
+	int structTypeErr;
+	int structTypeErr;
+};
+
