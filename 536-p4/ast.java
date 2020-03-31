@@ -142,7 +142,6 @@ class ProgramNode extends ASTnode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
-        System.out.println("ProgramNode name analysis called");
         return myDeclList.nameAnalysis(workingSymTable);
     }
 
@@ -169,8 +168,6 @@ class DeclListNode extends ASTnode {
 
     public SymTable nameAnalysis(SymTable workingCopy)
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
-        
-        System.out.println("DeclListNode name analysis called");
         //create a symboltable going through the list
         for (DeclNode temp : myDecls) {
             //go through each DeclNode and add to the symbol table
@@ -256,7 +253,6 @@ class StmtListNode extends ASTnode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
-        System.out.println("StmtListNode nameAnalysis called");
         //check the declarations
         //TODO: error checking w/ statements and stuff
         for (StmtNode tempStmtNode: myStmts) {
@@ -340,7 +336,6 @@ class VarDeclNode extends DeclNode {
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
             }
             if (workingSymTable.lookupGlobal(myType.strVal()) == null) {
-                System.out.println("myType toString is :" + myType.strVal());
                 valid = false;
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid name of a struct type");
             } 
@@ -450,12 +445,9 @@ class StructDeclNode extends DeclNode {
 
     public SymTable nameAnalysis(SymTable workingSymTable)
             throws IllegalArgumentException, EmptySymTableException, DuplicateSymException {
-        
-        System.out.println("name analysis for StructDeclNode called");
 
         StructDecSym structDec = new StructDecSym("struct", myDeclList.nameAnalysis(new SymTable()));
         if (workingSymTable.lookupLocal(myId.getStrVal()) == null) {
-            System.out.println("Struct added to symTable");
             workingSymTable.addDecl(myId.getStrVal(), structDec);
         } else {
             //IDK WHAT TO DO ABOUT THIS
@@ -927,9 +919,7 @@ class IdNode extends ExpNode {
     //need to do name analysis
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
         idSym = workingSymTable.lookupGlobal(myStrVal);
-        System.out.println("looking at :" + myStrVal);
         if (idSym == null) {
-            System.out.println("not found in symbol table: " + myStrVal);
             //found
             (new ErrMsg()).fatal(myLineNum, myCharNum, "Undeclared Identifier");
         } 
@@ -982,7 +972,9 @@ class DotAccessExpNode extends ExpNode {
         if (tempLocSym != null) {
             //make sure that the accessor is a struct
             if (!tempLocSym.isStruct()) {
+                //if its a bad struct type then it must also have an invalid struct field name
                 (new ErrMsg()).fatal(myLoc.myLineNum, myLoc.myCharNum, "Dot-access of non-struct type");
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
             } else {
                 //make sure that the accessing field is in the struct
                 Sym tempStructDecSym = workingSymTable.lookupGlobal(tempLocSym.getType());
@@ -993,10 +985,8 @@ class DotAccessExpNode extends ExpNode {
                     } else {
                         (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
                     }
-                }
-            }
-            
-                
+                }      
+        } 
         }
     }
 
@@ -1019,7 +1009,6 @@ class AssignNode extends ExpNode {
     }
 
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
-        System.out.println("name analysis for AssigNode called");
         //check for both the lhs and rhs
         myLhs.nameAnalysisNoReturn(workingSymTable);
         myExp.nameAnalysisNoReturn(workingSymTable);
