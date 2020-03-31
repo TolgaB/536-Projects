@@ -339,14 +339,14 @@ class VarDeclNode extends DeclNode {
         } else {
             boolean valid = true;
             //check to see if double declaration
-            if (workingSymTable.lookupLocal(myId.getStrVal()) != null) {
-                valid = false;
-                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
-            }
             if (workingSymTable.lookupGlobal(myType.strVal()) == null) {
                 valid = false;
                 (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid name of a struct type");
             } 
+            if (workingSymTable.lookupLocal(myId.getStrVal()) != null) {
+                valid = false;
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Multiply declared identifier");
+            }
             if (valid) {
                 workingSymTable.addDecl(myId.getStrVal(), new StructSym(myType.strVal()));
             }
