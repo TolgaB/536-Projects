@@ -54,6 +54,7 @@ EmptySymTableException.class: EmptySymTableException.java
 test:
 	java -cp $(CP) P4 nameErrors.wumbo nameErrors.out
 	java -cp $(CP) P4 test.wumbo test.out
+	diff test.out expectedTest.out
 
 ###
 # clean
