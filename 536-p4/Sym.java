@@ -14,6 +14,10 @@ public class Sym {
     public String toString() {
         return type;
     }
+
+    public boolean isStruct() {
+        return false;
+    }
 }
 
 class FnSym extends Sym {
@@ -46,5 +50,8 @@ class StructDecSym extends Sym {
 class StructSym extends Sym {
     public StructSym(String type) {
         super(type);
+    }
+    public boolean isStruct() {
+        return true;
     }
 }

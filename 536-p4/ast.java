@@ -820,7 +820,13 @@ class ReturnStmtNode extends StmtNode {
 // **********************************************************************
 
 abstract class ExpNode extends ASTnode {
+    int myLineNum;
+    int myCharNum;
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
+    }
+    //need this for dot access
+    public Sym getSym(){
+        return null;
     }
 }
 
@@ -954,21 +960,29 @@ class DotAccessExpNode extends ExpNode {
 
     //need to do name analysis
     public void nameAnalysisNoReturn(SymTable workingSymTable) throws EmptySymTableException {
-        //check to see if the id exists in the symbol table
-        /*
-        myId.nameAnalysis(workingSymTable);
-        //check to see if it is a struct
-        Sym idSym = myId.getSym();
-        if (idSym != null) {
-            //if not a valid struct type
-            if (!idSym.structType()) {
-                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Dot-access of non-struct type");
+        //need to use myLoc to find the struct 
+        myLoc.nameAnalysisNoReturn(workingSymTable);
+        boolean valid = false;;
+        Sym tempLocSym = myLoc.getSym();
+        if (tempLocSym != null) {
+            //make sure that the accessor is a struct
+            if (!tempLocSym.isStruct()) {
+                (new ErrMsg()).fatal(myLoc.myLineNum, myLoc.myCharNum, "Dot-access of non-struct type");
             } else {
-
+                //make sure that the accessing field is in the struct
+                Sym tempStructDecSym = workingSymTable.lookupGlobal(tempLocSym.getType());
+                if (tempStructDecSym.isStructDecSym()) {
+                    Sym fieldSym = ((StructDecSym) tempStructDecSym).getFields().lookupLocal(myId.getStrVal());
+                    if (fieldSym != null) {
+                        valid = true;
+                    } else {
+                        (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
+                    }
+                }
             }
+            
+                
         }
-        */
-        //need to rewrite for myLoc and myId fuck this
     }
 
     private ExpNode myLoc;
