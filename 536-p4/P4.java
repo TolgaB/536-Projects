@@ -58,9 +58,9 @@ public class P4 {
         try {
             ((ASTnode)root.value).nameAnalysis(new SymTable());
         } catch (Exception e) {
-                System.out.println("ope");
+                System.out.println("An exception was thrown by the SymbolTable" +
+                "class which should not have happened for p4.");
         }
-
         ((ASTnode)root.value).unparse(outFile, 0);
        
         outFile.close();
