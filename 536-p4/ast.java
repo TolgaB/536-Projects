@@ -978,7 +978,7 @@ class DotAccessExpNode extends ExpNode {
             if (!tempLocSym.isStruct()) {
                 //if its a bad struct type then it must also have an invalid struct field name
                 (new ErrMsg()).fatal(myLoc.getLineNum(), myLoc.getCharNum(), "Dot-access of non-struct type");
-                (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
+                (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
             } else {
                 //make sure that the accessing field is in the struct
                 Sym tempStructDecSym = workingSymTable.lookupGlobal(tempLocSym.getType());
@@ -993,7 +993,7 @@ class DotAccessExpNode extends ExpNode {
             } 
         } else {
             (new ErrMsg()).fatal(myLoc.getLineNum(), myLoc.getCharNum(), "Dot-access of non-struct type");
-            (new ErrMsg()).fatal(myId.getLineNum(), myId.getLineNum(), "Invalid struct field name");
+            (new ErrMsg()).fatal(myId.getLineNum(), myId.getCharNum(), "Invalid struct field name");
         }
     }
 
