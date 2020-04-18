@@ -1859,7 +1859,7 @@ class CallExpNode extends ExpNode {
         int num = 0;
         for (Type paramType: ((FnSym) myId.sym()).getParamTypes()) {
             //need to skip if error type
-            if (!(paramType.getClass().equals(expListTypes.get(num).getClass())) && 
+            if (!(paramType.equals(expListTypes.get(num))) && 
             !(expListTypes.get(num) instanceof ErrorType)) {
                 //Type of actual does not match type of formal Error Msg
                 ErrMsg.fatal(myExpList.lineNum(num), myExpList.charNum(num),
@@ -2275,7 +2275,7 @@ class EqualsNode extends BinaryExpNode {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct variables");
             return new ErrorType();
         }
-        if (!(firstT.getClass().equals(secT.getClass()))) {
+        if (!(firstT.equals(secT))) {
             if (!(firstT instanceof ErrorType || secT instanceof ErrorType)) {
                 ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
                 return new ErrorType();
