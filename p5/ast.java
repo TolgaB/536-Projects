@@ -1031,14 +1031,12 @@ class WriteStmtNode extends StmtNode {
 
         if (!(fType instanceof ErrorType)) {
             if (fType instanceof FnType) {
-                if (myExp instanceof CallExpNode) {
-                    if ((((CallExpNode) myExp).getIdNode().getFuncReturnType()) instanceof VoidType) {
-                        ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write void");
-                    }
-                } else {
+
                     //Attempt to write to a function Error Msg
                     ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a function");
-                }
+            }
+            if (fType instanceof VoidType) {
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write void");
             }
             if (fType instanceof StructDefType) {
                 //Attempt to write a struct name Error Msg
@@ -1880,7 +1878,7 @@ class CallExpNode extends ExpNode {
             num++;
         }
         //return the functions return type
-        return idType;
+        return myId.getFuncReturnType();
     }
 
     public IdNode getIdNode() {
@@ -2275,15 +2273,11 @@ class EqualsNode extends BinaryExpNode {
         Type firstT = myExp1.typeCheck();
         Type secT = myExp2.typeCheck();
         if ((firstT instanceof FnType) && (secT  instanceof FnType)) {
-            if (myExp1 instanceof CallExpNode && myExp2 instanceof CallExpNode) {
-                if ((((CallExpNode) myExp1).getIdNode().getFuncReturnType() instanceof VoidType) &&
-                (((CallExpNode) myExp2).getIdNode().getFuncReturnType() instanceof VoidType) ) {
-                    ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
-                }
-            }
-            else {
-                 ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
-            }
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
+            return new ErrorType();
+        }
+        if ((firstT instanceof VoidType) && (secT instanceof VoidType)) {
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
             return new ErrorType();
         }
         if ((firstT instanceof StructDefType) && (secT instanceof StructDefType)) {
