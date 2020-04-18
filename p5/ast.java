@@ -1361,7 +1361,6 @@ class ReturnStmtNode extends StmtNode {
     //for this typeCheck we need to make sure the return type matches
     public void typeCheck(TypeNode expectedReturnType) {
 
-        Type fType = myExp.typeCheck();
         //need to check for various types of func return errors
         if (myExp == null) {
             //make sure its a void function
@@ -1380,6 +1379,7 @@ class ReturnStmtNode extends StmtNode {
             }
         }
 
+        Type fType = myExp.typeCheck();
         if (!(expectedReturnType.type().getClass().equals(fType)) && 
         !(fType instanceof ErrorType)) {
                 //Bad return value error msg
