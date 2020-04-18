@@ -2276,7 +2276,7 @@ class EqualsNode extends BinaryExpNode {
             return new ErrorType();
         }
         if (!(firstT.getClass().equals(secT.getClass()))) {
-            if (!(mfirstT instanceof ErrorType || secT instanceof ErrorType)) {
+            if (!(firstT instanceof ErrorType || secT instanceof ErrorType)) {
                 ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
                 return new ErrorType();
             }
@@ -2318,16 +2318,16 @@ class NotEqualsNode extends BinaryExpNode {
              ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
              return new ErrorType();
          }
-         if ((firstT.typeCheck() instanceof StructDefType) && (secT instanceof StructDefType)) {
+         if ((firstT instanceof StructDefType) && (secT instanceof StructDefType)) {
              ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct names");
              return new ErrorType();
          }
-         if ((firstT.typeCheck() instanceof StructType) && (secT instanceof StructType)) {
+         if ((firstT instanceof StructType) && (secT instanceof StructType)) {
              ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct variables");
              return new ErrorType();
          }
-         if (!(firstT.typeCheck().getClass().equals(secT.getClass()))) {
-             if (!(mfirstT.typeCheck() instanceof ErrorType || secT instanceof ErrorType)) {
+         if (!(firstT.getClass().equals(secT.getClass()))) {
+             if (!(firstT.typeCheck() instanceof ErrorType || secT instanceof ErrorType)) {
                  ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
                  return new ErrorType();
              }
