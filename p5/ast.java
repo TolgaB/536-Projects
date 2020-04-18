@@ -1280,7 +1280,7 @@ class RepeatStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof IntType) 
         && !(myExp.typeCheck() instanceof ErrorType)) {
             //Non-integer expression used as a repeat clause
-            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Non-integer expression used as a repeat clause")
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Non-integer expression used as a repeat clause");
         }
         myStmtList.typeCheck(expectedReturnType);
     }
