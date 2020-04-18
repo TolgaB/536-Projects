@@ -1352,6 +1352,7 @@ class ReturnStmtNode extends StmtNode {
             if (!(expectedReturnType.type() instanceof VoidType)) {
                 //Missing return value error message
                 ErrMsg.fatal(0,0, "Missing return value");
+                return;
             }
         }
         
@@ -1359,6 +1360,7 @@ class ReturnStmtNode extends StmtNode {
             if (myExp != null) {
                 //Return with a value in a void function error message
                 ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Return with a value in a void function");
+                return;
             }
         }
 
@@ -1990,12 +1992,12 @@ class PlusNode extends BinaryExpNode {
 
     public Type typeCheck() {
         boolean error = false;
-        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
@@ -2029,12 +2031,12 @@ class MinusNode extends BinaryExpNode {
     }
     public Type typeCheck() {
         boolean error = false;
-        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
@@ -2070,12 +2072,12 @@ class TimesNode extends BinaryExpNode {
 
     public Type typeCheck() {
         boolean error = false;
-        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
@@ -2110,12 +2112,12 @@ class DivideNode extends BinaryExpNode {
 
     public Type typeCheck() {
         boolean error = false;
-        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
