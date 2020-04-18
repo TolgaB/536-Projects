@@ -1031,8 +1031,14 @@ class WriteStmtNode extends StmtNode {
 
         if (!(fType instanceof ErrorType)) {
             if (fType instanceof FnType) {
-                //Attempt to write to a function Error Msg
-                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a function");
+                if (myExp instanceof CallExpNode) {
+                    if ((((CallExpNode) myExp).getIdNode().getFuncReturnType()) instanceof VoidType) {
+                        ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write void");
+                    }
+                } else {
+                    //Attempt to write to a function Error Msg
+                    ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a function");
+                }
             }
             if (fType instanceof StructDefType) {
                 //Attempt to write a struct name Error Msg
@@ -1041,10 +1047,6 @@ class WriteStmtNode extends StmtNode {
             if (fType instanceof StructType) {
                 //Attempt to write a struct variable Error Msg
                 ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct variable");
-            }
-            if (fType instanceof VoidType) {
-                //Attempt to write void Error msg
-                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write void");
             }
         }
     }
