@@ -2327,7 +2327,7 @@ class NotEqualsNode extends BinaryExpNode {
              return new ErrorType();
          }
          if (!(firstT.getClass().equals(secT.getClass()))) {
-             if (!(firstT.typeCheck() instanceof ErrorType || secT instanceof ErrorType)) {
+             if (!(firstT instanceof ErrorType || secT instanceof ErrorType)) {
                  ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
                  return new ErrorType();
              }
