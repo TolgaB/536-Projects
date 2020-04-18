@@ -60,6 +60,7 @@ test:
 	java -cp $(CP) P5 test.wumbo test.out
 	java -cp $(CP) P5 typeErrors.wumbo testErr.out
 
+
 ###
 # clean
 ###

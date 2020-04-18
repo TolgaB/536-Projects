@@ -1,0 +1,137 @@
+bool b;
+
+struct S { 
+	int f;
+	bool j;
+};
+struct E {
+	int r;
+};
+
+struct E y;
+struct S t;
+
+void f(int p1, bool p2) {
+
+}
+
+void g() {}
+void r() {}
+
+void main() {
+	int c;
+	bool d;
+	//should throw a Attempt to write a function error
+	cout << f;
+	//should throw an Attempt to write a struct name error
+	cout << S;
+	//should throw an Attempt to write a struct variable error
+	cout << t;
+	//should throw an attempt to write void error
+	cout << f();
+	//throw attempt to read a function
+	cin >> f;
+	//throw attempt to read a struct name
+	cin >> S;
+	//throw attempt to read a struct variable
+	cin >> t;
+	//throw attempt to call a non function
+	b();
+	//throw attempt to call a non function param ignored
+	b(true, true);
+	//throw attempt to call func with wrong # params
+	f();
+	f(0);
+	f(1,1,1);
+	//throw type of actual does not match type of formal
+	f(true,1);
+	f(1,true);
+	//Throw arithmetic operator applied to non-numeric operator
+	c = true + 1;
+	c = 1 + true;
+	c = true + false;
+	c = 1 - true;
+	c = true -1;
+	c = false - true;
+	c = 1 * true;
+	c = true * 1;	
+	c = true * false;
+	c = true / 1;
+	c = 1/true;
+	c = true/false;
+	d++;
+	d--;
+	t++;
+	t--;
+	//throw relational operator applied to non-numeric operand
+	c = (1 < true);
+	c = (true > 1);
+	c = (false <= 1);
+	c = (1 >= false);
+	//throw logical operator applied to non-bool operand
+	d = (!1);
+	d = (1 && true);
+	d = (5 || false);
+	d = (5 || 5);
+	//throw non bool expression used as an if condition
+	if (1) {}
+	if (1+3) {}
+	if (t) {}
+	//throw non-bool expression used as a while condition
+	while (1) {}
+	while (1+3) {}
+	while (t) {}
+	//throw non-integer expression used as a repeat clause
+	repeat(true){}
+	repeat(S){}
+	repeat(d){}
+	repeat(t){}
+	//throw type mismatch
+	c = true;
+	d = 1;
+	S = 1;
+	//more throw type mismatch
+	d = (c == true);
+
+	//throw equality operator applied to void functions
+	if ((g()==r())){}
+	if ((g()!=r())){}
+	//throw equality operator applied to functions
+	if (g==r){}
+	if (g!=r){}
+	//throw equality operator applied to struct names
+	if(S==S){}
+	if(S!=S){}
+	//throw equality operator applied to struct variables
+	if(t==t){}
+	if(t!=t){}
+
+	//throw function assignment
+	g = r;
+	//throw struct name assignment
+	S = E;
+	//throw struct variable assignment
+	t = y;
+	
+}
+
+//throw missing return value
+int testFunc() {
+	return;
+}
+
+//throw return with value from void func
+void secTest() {
+	return 0;
+}
+
+//Throw bad return value 
+bool thirdTest() {
+	return 0;
+}
+
+//throw bad return value
+int fourthTest() {
+	return true;
+}	
+
