@@ -1786,7 +1786,6 @@ class AssignNode extends ExpNode {
         }else if (!((lhsType instanceof IntType && rhsType instanceof IntType) 
         || (lhsType instanceof BoolType && rhsType instanceof BoolType))) {
             //make sure one isnt an ErrorType
-            System.out.println("right type is" + rhsType.toString());
             if (!(lhsType instanceof ErrorType || rhsType instanceof ErrorType)) {
                 //type mismatch error
                 if (rhsType instanceof FnType) {
@@ -1879,7 +1878,6 @@ class CallExpNode extends ExpNode {
             num++;
         }
         //return the functions return type
-        System.out.println("callexpnode result:" + idType.toString());
         return idType;
     }
 
