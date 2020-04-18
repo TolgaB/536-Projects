@@ -1992,12 +1992,14 @@ class PlusNode extends BinaryExpNode {
 
     public Type typeCheck() {
         boolean error = false;
-        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        Type firstType = myExp1.typeCheck();
+        Type secType = myExp2.typeCheck();
+        if ((!(firstType instanceof IntType)) && !(firstType instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(secType instanceof IntType)) && !(secType instanceof ErrorType)) {
             error = true;
             //Arithmetic operator applied to non-numeric operand
             ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
@@ -2153,12 +2155,14 @@ class AndNode extends BinaryExpNode {
 
     public Type typeCheck() {
         boolean error = false;
-        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        Type firstType = myExp1.typeCheck();
+        Type secType = myExp2.typeCheck();
+        if ((!(firstType instanceof BoolType)) && !(firstType instanceof ErrorType)) {
             error = true;
             //Logical operator applied to non-bool operand Error Msg
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
-        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(secType instanceof BoolType)) && !(secType instanceof ErrorType)) {
             error = true;
             //Logical operator applied to non-bool operand Error Msg
             ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
@@ -2241,7 +2245,7 @@ class EqualsNode extends BinaryExpNode {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
         }
         if ((myExp1.typeCheck() instanceof FnType) && (myExp2.typeCheck() instanceof FnType)) {
-            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
         }
         if ((myExp1.typeCheck() instanceof StructDefType) && (myExp2.typeCheck() instanceof StructDefType)) {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct names");
