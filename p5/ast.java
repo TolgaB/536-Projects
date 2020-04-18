@@ -369,6 +369,14 @@ class ExpListNode extends ASTnode {
         return size;
     }
 
+    public int lineNum(int expNum) {
+        return myExps.get(expNum).lineNum();
+    }
+
+    public int charNum(int expNum) {
+        return myExps.get(expNum).charNum();
+    }
+
     private int size;
     // list of kids (ExpNodes)
     private List<ExpNode> myExps;
@@ -911,6 +919,7 @@ class PostIncStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof IntType)
         && !(myExp.typeCheck() instanceof ErrorType)) {
             //Arithmetic operator applied to non-numeric operand Error Msg
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operator");
         }
     }
 
@@ -941,6 +950,7 @@ class PostDecStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof IntType)
         && !(myExp.typeCheck() instanceof ErrorType)) {
             //Arithmetic operator applied to non-numeric operand Error Msg
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operator");
         }
     }
 
@@ -972,12 +982,15 @@ class ReadStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof ErrorType)) {
             if (myExp.typeCheck() instanceof FnType) {
                 //Attempt to read a function Error Msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a function");
             }
             if (myExp.typeCheck() instanceof StructDefType) {
                 //Attempt to read a struct name Error Msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a struct name");
             }
             if (myExp.typeCheck() instanceof StructType) {
                 //Attempt to read a struct variable Error Msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct variable");
             }
          }
     }
@@ -1011,15 +1024,19 @@ class WriteStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof ErrorType)) {
             if (myExp.typeCheck() instanceof FnType) {
                 //Attempt to write to a function Error Msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a function");
             }
             if (myExp.typeCheck() instanceof StructDefType) {
                 //Attempt to write a struct name Error Msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct name");
             }
             if (myExp.typeCheck() instanceof StructType) {
                 //Attempt to write a struct variable Error Msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct variable");
             }
             if (myExp.typeCheck() instanceof VoidType) {
                 //Attempt to write void Error msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write void");
             }
         }
     }
@@ -1074,6 +1091,7 @@ class IfStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof BoolType)
         && !(myExp.typeCheck() instanceof ErrorType)) {
             //Non-bool expression used as an if condition
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Non-bool expression used as an if condition");
         }
         myStmtList.typeCheck(expectedFuncReturnType);
     }
@@ -1150,6 +1168,7 @@ class IfElseStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof BoolType)
         && !(myExp.typeCheck() instanceof ErrorType)) {
             //Non-bool expression used as an if condition Error Msg
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Non-bool expression used as an if condition");
         }
         myThenStmtList.typeCheck(expectedReturnType);
         myElseStmtList.typeCheck(expectedReturnType);
@@ -1207,6 +1226,7 @@ class WhileStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof BoolType) 
         && !(myExp.typeCheck() instanceof ErrorType)) {
             //Non-bool expression used as a while condition Error Msg
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Non-bool expression used as a while condition");
         }
         myStmtList.typeCheck(expectedReturnType);
     }
@@ -1260,6 +1280,7 @@ class RepeatStmtNode extends StmtNode {
         if (!(myExp.typeCheck() instanceof IntType) 
         && !(myExp.typeCheck() instanceof ErrorType)) {
             //Non-integer expression used as a repeat clause
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Non-integer expression used as a repeat clause")
         }
         myStmtList.typeCheck(expectedReturnType);
     }
@@ -1330,18 +1351,21 @@ class ReturnStmtNode extends StmtNode {
             //make sure its a void function
             if (!(expectedReturnType.type() instanceof VoidType)) {
                 //Missing return value error message
+                ErrMsg.fatal(0,0, "Missing return value");
             }
         }
         
         if (expectedReturnType.type() instanceof VoidType) {
             if (myExp != null) {
                 //Return with a value in a void function error message
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Return with a value in a void function");
             }
         }
 
         if (!(expectedReturnType.type().getClass().equals(myExp.typeCheck())) && 
         !(myExp.typeCheck() instanceof ErrorType)) {
                 //Bad return value error msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Bad return value");
         }
     }
 
@@ -1361,6 +1385,10 @@ abstract class ExpNode extends ASTnode {
 
     abstract public Type typeCheck();
 
+    abstract public int lineNum();
+
+    abstract public int charNum();
+
 }
 
 class IntLitNode extends ExpNode {
@@ -1376,6 +1404,14 @@ class IntLitNode extends ExpNode {
 
     public Type typeCheck() {
         return new IntType();
+    }
+
+    public int lineNum() {
+        return myLineNum;
+    }
+
+    public int charNum() {
+        return myCharNum;
     }
 
     private int myLineNum;
@@ -1398,6 +1434,14 @@ class StringLitNode extends ExpNode {
         return new StringType();
     }
 
+    public int lineNum() {
+        return myLineNum;
+    }
+
+    public int charNum() {
+        return myCharNum;
+    }
+
     private int myLineNum;
     private int myCharNum;
     private String myStrVal;
@@ -1417,6 +1461,14 @@ class TrueNode extends ExpNode {
         return new BoolType();
     }
 
+    public int lineNum() {
+        return myLineNum;
+    }
+
+    public int charNum() {
+        return myCharNum;
+    }
+
     private int myLineNum;
     private int myCharNum;
 }
@@ -1433,6 +1485,14 @@ class FalseNode extends ExpNode {
 
     public Type typeCheck() {
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myLineNum;
+    }
+
+    public int charNum() {
+        return myCharNum;
     }
 
     private int myLineNum;
@@ -1700,21 +1760,27 @@ class AssignNode extends ExpNode {
         rhsType instanceof IntType || rhsType instanceof BoolType)) {
             if ((lhsType instanceof FnType) && !(lhsType instanceof ErrorType)) {
                 //function assignment error msg
+                ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Function assignment");
             }
             if ((rhsType instanceof FnType) && !(rhsType instanceof ErrorType)) {
                 //function assignment error msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Function assignment");
             }
             if ((lhsType instanceof StructDefType) && !(lhsType instanceof ErrorType)) {
                 //Struct name assignment error msg
+                ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Struct name assignment");
             }
             if ((rhsType instanceof StructDefType) && !(rhsType instanceof ErrorType)) {
                 //Struct name assignment error msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Struct name assignment");
             }
             if ((lhsType instanceof StructType) && !(lhsType instanceof ErrorType)) {
                 //Struct variable assignment error msg
+                ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Struct variable assignment");
             }
             if ((rhsType instanceof StructType) && !(rhsType instanceof ErrorType)) {
                 //Struct variable assignment error msg
+                ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Struct variable assignment");
             }
         }
 
@@ -1724,12 +1790,21 @@ class AssignNode extends ExpNode {
             //make sure one isnt an ErrorType
             if (!(lhsType instanceof ErrorType || rhsType instanceof ErrorType)) {
                 //type mismatch error
+                ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Type mismatch");
             }
         }
 
-        //type of the result is the right side
+        //type of the result is the right side might be type ErrorType
         return rhsType;
 
+    }
+
+    public int lineNum() {
+        return myLhs.lineNum();
+    }
+
+    public int charNum() {
+        return myLhs.charNum();
     }
 
     // 2 kids  
@@ -1774,15 +1849,18 @@ class CallExpNode extends ExpNode {
         //no possibility for this to be ErrorType
         if (!(myId.typeCheck() instanceof FnType)) {
             //attempt to call a non-function error msg
+            ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Attempt to call a non-function");
             //dont type check the params
+            return new ErrorType();
         }
         if (((FnSym) myId.sym()).getNumParams() != myExpList.getSize()) {
             //Function call with wrong number of args error msg
+            ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Function call with wrong number of args");
             //dont type check the params
+            return new ErrorType();
         }
 
         List<Type> expListTypes = myExpList.getTypes();
-
         //need to check each param for the right type
         int num = 0;
         for (Type paramType: ((FnSym) myId.sym()).getParamTypes()) {
@@ -1790,6 +1868,8 @@ class CallExpNode extends ExpNode {
             if (!(paramType.getClass().equals(expListTypes.get(num).getClass())) && 
             !(expListTypes.get(num) instanceof ErrorType)) {
                 //Type of actual does not match type of formal Error Msg
+                ErrMsg.fatal(myExpList.lineNum(num), myExpList.charNum(num),
+                "Type of actual does not match type of formal");
             }
             num++;
         }
@@ -1797,6 +1877,13 @@ class CallExpNode extends ExpNode {
         return myId.typeCheck();
     }
 
+    public int lineNum() {
+        return myId.lineNum();
+    }
+
+    public int charNum() {
+        return myId.charNum();
+    }
     // 2 kids  
     private IdNode myId;
     private ExpListNode myExpList;  // possibly null
@@ -1858,10 +1945,20 @@ class UnaryMinusNode extends UnaryExpNode {
     public Type typeCheck() {
         if (!(myExp.typeCheck() instanceof IntType) && !(myExp.typeCheck() instanceof ErrorType)) {
             //Arithmetic operator applied to non numeric operator
-            //need to return in here prob ErrorType
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operand");
+            return new ErrorType();
         }
         return new IntType(); 
     }
+
+    public int lineNum() {
+        return myExp.lineNum();
+    }
+
+    public int charNum() {
+        return myExp.charNum();
+    }
+
 }
 
 class NotNode extends UnaryExpNode {
@@ -1878,9 +1975,18 @@ class NotNode extends UnaryExpNode {
     public Type typeCheck() {
         if (!(myExp.typeCheck() instanceof BoolType) && !(myExp.typeCheck() instanceof ErrorType)) {
             //Logical operator applied to a non-bool operand Error Msg
-            //need to return in here prob ErrorType
+            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Logical operator applied to non-bool operand");
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp.lineNum();
+    }
+
+    public int charNum() {
+        return myExp.charNum();
     }
 }
 
@@ -1902,13 +2008,29 @@ class PlusNode extends BinaryExpNode {
     }
 
     public Type typeCheck() {
-        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        boolean error = false;
+        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Arithmetic operator applied to non-numeric operand
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Arithmetic operator applied to non-numeric operand
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new IntType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
 
@@ -1925,13 +2047,29 @@ class MinusNode extends BinaryExpNode {
         p.print(")");
     }
     public Type typeCheck() {
-        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        boolean error = false;
+        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Arithmetic operator applied to non-numeric operand
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Arithmetic operator applied to non-numeric operand
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new IntType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 
 }
@@ -1950,13 +2088,29 @@ class TimesNode extends BinaryExpNode {
     }
 
     public Type typeCheck() {
-        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        boolean error = false;
+        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Arithmetic operator applied to non-numeric operand
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Arithmetic operator applied to non-numeric operand
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new IntType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
 
@@ -1974,14 +2128,31 @@ class DivideNode extends BinaryExpNode {
     }
 
     public Type typeCheck() {
-        if ((!(myExp1.typeCheck() instanceof IntType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+        boolean error = false;
+        if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Arithmetic operator applied to non-numeric operand
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Arithmetic operator applied to non-numeric operand");
         }
-        if ((!(myExp2.typeCheck() instanceof IntType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+        if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Arithmetic operator applied to non-numeric operand
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Arithmetic operator applied to non-numeric operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new IntType();
     }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
+    }
+
 }
 
 class AndNode extends BinaryExpNode {
@@ -1998,13 +2169,29 @@ class AndNode extends BinaryExpNode {
     }
 
     public Type typeCheck() {
+        boolean error = false;
         if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
         if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 
 }
@@ -2022,13 +2209,29 @@ class OrNode extends BinaryExpNode {
         p.print(")");
     }
     public Type typeCheck() {
+        boolean error = false;
         if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
         if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
 
@@ -2045,13 +2248,29 @@ class EqualsNode extends BinaryExpNode {
         p.print(")");
     }
     public Type typeCheck() {
+        boolean error = false;
         if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
         if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
 
@@ -2068,13 +2287,29 @@ class NotEqualsNode extends BinaryExpNode {
         p.print(")");
     }
     public Type typeCheck() {
+        boolean error = false;
         if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
         if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
 
@@ -2091,13 +2326,29 @@ class LessNode extends BinaryExpNode {
         p.print(")");
     }
     public Type typeCheck() {
+        boolean error = false;
         if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
         if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
 
@@ -2114,13 +2365,29 @@ class GreaterNode extends BinaryExpNode {
         p.print(")");
     }
     public Type typeCheck() {
+        boolean error = false;
         if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
         if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
 
@@ -2137,13 +2404,29 @@ class LessEqNode extends BinaryExpNode {
         p.print(")");
     }
     public Type typeCheck() {
+        boolean error = false;
         if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
         if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
 
@@ -2160,12 +2443,28 @@ class GreaterEqNode extends BinaryExpNode {
         p.print(")");
     }
     public Type typeCheck() {
+        boolean error = false;
         if ((!(myExp1.typeCheck() instanceof BoolType)) && !(myExp1.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Logical operator applied to non-bool operand");
         }
         if ((!(myExp2.typeCheck() instanceof BoolType)) && !(myExp2.typeCheck() instanceof ErrorType)) {
+            error = true;
             //Logical operator applied to non-bool operand Error Msg
+            ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Logical operator applied to non-bool operand");
+        }
+        if (error) {
+            return new ErrorType();
         }
         return new BoolType();
+    }
+
+    public int lineNum() {
+        return myExp1.lineNum();
+    }
+
+    public int charNum() {
+        return myExp1.charNum();
     }
 }
