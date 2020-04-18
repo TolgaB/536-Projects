@@ -1,0 +1,140 @@
+bool b;
+struct S{
+    int f;
+    bool j;
+};
+
+struct E{
+    int r;
+};
+
+struct E y;
+struct S t;
+void f(int p1, bool p2) {
+}
+
+void g() {
+}
+
+void r() {
+}
+
+void main() {
+    int c;
+    bool d;
+    cout << f(int,bool->void);
+    cout << S(struct);
+    cout << t(S);
+    cout << f(int,bool->void)();
+    cin >> f(int,bool->void);
+    cin >> S(struct);
+    cin >> t(S);
+    b(bool)();
+    b(bool)(true, true);
+    f(int,bool->void)();
+    f(int,bool->void)(0);
+    f(int,bool->void)(1, 1, 1);
+    f(int,bool->void)(true, 1);
+    f(int,bool->void)(1, true);
+    c(int) = (true + 1);
+    c(int) = (1 + true);
+    c(int) = (true + false);
+    c(int) = (1 - true);
+    c(int) = (true - 1);
+    c(int) = (false - true);
+    c(int) = (1 * true);
+    c(int) = (true * 1);
+    c(int) = (true * false);
+    c(int) = (true / 1);
+    c(int) = (1 / true);
+    c(int) = (true / false);
+    d(bool)++;
+    d(bool)--;
+    t(S)++;
+    t(S)--;
+    c(int) = (1 < true);
+    c(int) = (true > 1);
+    c(int) = (false <= 1);
+    c(int) = (1 >= false);
+    d(bool) = (!1);
+    d(bool) = (1 && true);
+    d(bool) = (5 || false);
+    d(bool) = (5 || 5);
+    if (1) {
+    }
+    if ((1 + 3)) {
+    }
+    if (t(S)) {
+    }
+    while (1) {
+    }
+    while ((1 + 3)) {
+    }
+    while (t(S)) {
+    }
+    repeat (true) {
+    }
+    repeat (S(struct)) {
+    }
+    repeat (d(bool)) {
+    }
+    repeat (t(S)) {
+    }
+    c(int) = true;
+    d(bool) = 1;
+    S(struct) = 1;
+    d(bool) = (c(int) == true);
+    if ((g(->void)() == r(->void)())) {
+    }
+    if ((g(->void)() != r(->void)())) {
+    }
+    if ((g(->void) == r(->void))) {
+    }
+    if ((g(->void) != r(->void))) {
+    }
+    if ((S(struct) == S(struct))) {
+    }
+    if ((S(struct) != S(struct))) {
+    }
+    if ((t(S) == t(S))) {
+    }
+    if ((t(S) != t(S))) {
+    }
+    g(->void) = r(->void);
+    S(struct) = E(struct);
+    t(S) = y(E);
+}
+
+int testFunc() {
+    return;
+}
+
+void secTest() {
+    return 0;
+}
+
+bool thirdTest() {
+    return 0;
+}
+
+int fourthTest() {
+    return true;
+}
+
+void math(int var) {
+}
+
+void advancedErr() {
+    int a;
+    bool b;
+    while (true) {
+        b(bool) = ((a(int) + true) && (b(bool) < true));
+    }
+    while ((false && 10)) {
+    }
+    a(int) = (5 - true);
+    a(int) = ((b(bool) + b(bool)) + b(bool));
+    a(int) = (testFunc(->int)() == 1);
+    a(int) = (1 + math(int->void)(true));
+}
+

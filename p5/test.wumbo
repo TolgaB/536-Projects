@@ -1,43 +1,43 @@
-bool bbb;
-struct S { int a; };
+bool testBool;
+int a ;
+
+struct S {
+	int b;
+	bool c;
+	int r;
+};
+
 struct S t;
 
-void f(int p1, bool p2) {
+int add(int a, int b) {
+	int c;
+	c = a + b;
+	return c;
 }
 
-void main() {
-    int aaa;
+void doNothing() {
+	int r;
+	bool alwaysTrue;
+	bool alwaysFalse;
+	alwaysTrue = true;
+	r = 5;
+	while (alwaysTrue) {
+		repeat(r){}
+	}
+	r = add(r,r);
+	
+	if (alwaysTrue && alwaysTrue) {
+		repeat(r) {
+			alwaysTrue = false;
+		}
+	}
 
-    // some errors involving illegal operations on functions
-    aaa = f + f;
-    bbb = f == 3;
-    bbb = f > main;
-    bbb = f == f;
+	if (!alwaysFalse){}
 
-    // some errors involving bad function calls 
-    aaa();
-    f();
-    f(5);
-    f(aaa, aaa);
-    f(t, t.a);
-    S();
-
-    // some errors involving structs 
-    t = 5;
-    t = t;
-    cin >> S;
-    t = true || 3;
-    bbb = S && t.a;
-
-    // error involving return
-    return 10;
-
-    // other type errors 
-    aaa = aaa + (!false);
-    aaa = aaa + "foo";
-    bbb = aaa;
-
-    // don't give too many or too few error messages here 
-    bbb = (aaa + true) && (bbb < true);
+	t.b = 3;
+	t.r = add(t.b,t.b);
+	if (t.c == true) {}
 }
+
+
 
