@@ -1592,6 +1592,10 @@ class IdNode extends ExpNode {
         return mySym.getType();
     }
 
+    public Type getFuncReturnType() {
+        return (((FnSym) mySym).getReturnType());
+    }
+
     private int myLineNum;
     private int myCharNum;
     private String myStrVal;
@@ -1785,6 +1789,11 @@ class AssignNode extends ExpNode {
             System.out.println("right type is" + rhsType.toString());
             if (!(lhsType instanceof ErrorType || rhsType instanceof ErrorType)) {
                 //type mismatch error
+                if (rhsType instanceof FnType) {
+                    if (((CallExpNode) myExp).getIdNode().getFuncReturnType().equals(lhsType)) {
+                        return rhsType;
+                    }
+                }
                 ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Type mismatch");
             } 
         }
@@ -1874,6 +1883,9 @@ class CallExpNode extends ExpNode {
         return idType;
     }
 
+    public IdNode getIdNode() {
+        return myId;
+    }
     public int lineNum() {
         return myId.lineNum();
     }
