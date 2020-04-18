@@ -1759,16 +1759,11 @@ class AssignNode extends ExpNode {
 
         if ((lhsType instanceof FnType) && (rhsType instanceof FnType)) {
             ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Function assignment");
-        }
-        if ((lhsType instanceof StructDefType) && (rhsType instanceof StructDefType)) {
+        }else if ((lhsType instanceof StructDefType) && (rhsType instanceof StructDefType)) {
             ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Struct name assignment");
-        }
-        if ((lhsType instanceof StructType) && (rhsType instanceof StructType)) {
+        }else if ((lhsType instanceof StructType) && (rhsType instanceof StructType)) {
             ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Struct variable assignment");
-        }
-
-        //now check to see if the two variables being assigned are equal
-        if (!((lhsType instanceof IntType && rhsType instanceof IntType) 
+        }else if (!((lhsType instanceof IntType && rhsType instanceof IntType) 
         || (lhsType instanceof BoolType && rhsType instanceof BoolType))) {
             //make sure one isnt an ErrorType
             if (!(lhsType instanceof ErrorType || rhsType instanceof ErrorType)) {
@@ -2236,22 +2231,27 @@ class EqualsNode extends BinaryExpNode {
     }
     public Type typeCheck() {
         //how to check for ErrorType?
-        if (!(myExp1.typeCheck().getClass().equals(myExp2.typeCheck().getClass()))) {
-            if (!(myExp1.typeCheck() instanceof ErrorType || myExp2.typeCheck() instanceof ErrorType)) {
-                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
-            }
-        }
         if ((myExp1.typeCheck() instanceof VoidType) && (myExp2.typeCheck() instanceof VoidType)) {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
+            return new ErrorType();
         }
         if ((myExp1.typeCheck() instanceof FnType) && (myExp2.typeCheck() instanceof FnType)) {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
+            return new ErrorType();
         }
         if ((myExp1.typeCheck() instanceof StructDefType) && (myExp2.typeCheck() instanceof StructDefType)) {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct names");
+            return new ErrorType();
         }
         if ((myExp1.typeCheck() instanceof StructType) && (myExp2.typeCheck() instanceof StructType)) {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct variables");
+            return new ErrorType();
+        }
+        if (!(myExp1.typeCheck().getClass().equals(myExp2.typeCheck().getClass()))) {
+            if (!(myExp1.typeCheck() instanceof ErrorType || myExp2.typeCheck() instanceof ErrorType)) {
+                ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
+                return new ErrorType();
+            }
         }
         //TODO: not sure about this
         return new BoolType();
