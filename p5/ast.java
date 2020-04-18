@@ -2274,12 +2274,16 @@ class EqualsNode extends BinaryExpNode {
         //how to check for ErrorType?
         Type firstT = myExp1.typeCheck();
         Type secT = myExp2.typeCheck();
-        if ((firstT instanceof VoidType) && (secT instanceof VoidType)) {
-            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
-            return new ErrorType();
-        }
         if ((firstT instanceof FnType) && (secT  instanceof FnType)) {
-            ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
+            if (myExp1 instanceof CallExpNode && myExp2 instanceof CallExpNode) {
+                if ((((CallExpNode) myExp1).getIdNode().getFuncReturnType() instanceof VoidType) &&
+                (((CallExpNode) myExp2).getIdNode().getFuncReturnType() instanceof VoidType) ) {
+                    ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
+                }
+            }
+            else {
+                 ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
+            }
             return new ErrorType();
         }
         if ((firstT instanceof StructDefType) && (secT instanceof StructDefType)) {
