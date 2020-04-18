@@ -1840,9 +1840,10 @@ class CallExpNode extends ExpNode {
 
     public Type typeCheck() {
 
+        Type idType = myId.typeCheck();
         //this is where we do calling function type checks
         //no possibility for this to be ErrorType
-        if (!(myId.typeCheck() instanceof FnType)) {
+        if (!(idType instanceof FnType)) {
             //attempt to call a non-function error msg
             ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Attempt to call a non-function");
             //dont type check the params
@@ -1869,7 +1870,8 @@ class CallExpNode extends ExpNode {
             num++;
         }
         //return the functions return type
-        return myId.typeCheck();
+        System.out.println("callexpnode result:" + idType.toString());
+        return idType;
     }
 
     public int lineNum() {
