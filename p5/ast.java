@@ -1380,7 +1380,7 @@ class ReturnStmtNode extends StmtNode {
         }
 
         Type fType = myExp.typeCheck();
-        if (!(expectedReturnType.type().equals(fType) && 
+        if (!(expectedReturnType.type().equals(fType)) && 
         !(fType instanceof ErrorType)) {
                 //Bad return value error msg
                 ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Bad return value");
