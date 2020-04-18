@@ -1,33 +1,39 @@
-bool bbb;
+bool testBool;
+int a;
 struct S{
-    int a;
+    int b;
+    bool c;
+    int r;
 };
 
 struct S t;
-void f(int p1, bool p2) {
+int add(int a, int b) {
+    int c;
+    c(int) = (a(int) + b(int));
+    return c(int);
 }
 
-void main() {
-    int aaa;
-    aaa(int) = (f(int,bool->void) + f(int,bool->void));
-    bbb(bool) = (f(int,bool->void) == 3);
-    bbb(bool) = (f(int,bool->void) > main(->void));
-    bbb(bool) = (f(int,bool->void) == f(int,bool->void));
-    aaa(int)();
-    f(int,bool->void)();
-    f(int,bool->void)(5);
-    f(int,bool->void)(aaa(int), aaa(int));
-    f(int,bool->void)(t(S), t(S).a(int));
-    S(struct)();
-    t(S) = 5;
-    t(S) = t(S);
-    cin >> S(struct);
-    t(S) = (true || 3);
-    bbb(bool) = (S(struct) && t(S).a(int));
-    return 10;
-    aaa(int) = (aaa(int) + (!false));
-    aaa(int) = (aaa(int) + "foo");
-    bbb(bool) = aaa(int);
-    bbb(bool) = ((aaa(int) + true) && (bbb(bool) < true));
+void doNothing() {
+    int r;
+    bool alwaysTrue;
+    bool alwaysFalse;
+    alwaysTrue(bool) = true;
+    r(int) = 5;
+    while (alwaysTrue(bool)) {
+        repeat (r(int)) {
+        }
+    }
+    r(int) = add(int,int->int)(r(int), r(int));
+    if ((alwaysTrue(bool) && alwaysTrue(bool))) {
+        repeat (r(int)) {
+            alwaysTrue(bool) = false;
+        }
+    }
+    if ((!alwaysFalse(bool))) {
+    }
+    t(S).b(int) = 3;
+    t(S).r(int) = add(int,int->int)(t(S).b(int), t(S).b(int));
+    if ((t(S).c(bool) == true)) {
+    }
 }
 

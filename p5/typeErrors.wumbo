@@ -135,3 +135,30 @@ int fourthTest() {
 	return true;
 }	
 
+void math(int var) {}
+//these are more advanced error checking
+void advancedErr() {
+	int a;
+	bool b;
+
+	while(true) {
+		//throw 1 arithmetic error and 2 relational errors only
+		b = (a+true) && (b < true); 		
+	}
+
+	//throw logical operator applied to a non bool operator
+	while(false && 10) {}
+	
+	//throw Arithmetic operator applied to a non-numeric operand
+	a = 5 -(true);
+
+	//throws 3 arithmetic errors
+	a = b + b + b;
+
+	//throw 1 type mismatch error
+	a = testFunc() == 1;
+
+	//throw error for bad arg type and one for 2nd operand of the +
+	a = 1+ math(true);
+}
+
