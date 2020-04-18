@@ -1782,6 +1782,7 @@ class AssignNode extends ExpNode {
         }else if (!((lhsType instanceof IntType && rhsType instanceof IntType) 
         || (lhsType instanceof BoolType && rhsType instanceof BoolType))) {
             //make sure one isnt an ErrorType
+            System.out.println("right type is" + rhsType.toString());
             if (!(lhsType instanceof ErrorType || rhsType instanceof ErrorType)) {
                 //type mismatch error
                 ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Type mismatch");
@@ -2326,7 +2327,7 @@ class NotEqualsNode extends BinaryExpNode {
              ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to struct variables");
              return new ErrorType();
          }
-         if (!(firstT.getClass().equals(secT.getClass()))) {
+         if (!(firstT.equals(secT))) {
              if (!(firstT instanceof ErrorType || secT instanceof ErrorType)) {
                  ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
                  return new ErrorType();
