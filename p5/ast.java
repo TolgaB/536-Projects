@@ -2387,7 +2387,7 @@ class LessNode extends BinaryExpNode {
         if (error) {
             return new ErrorType();
         }
-        return new IntType();
+        return new BoolType();
     }
 
     public int lineNum() {
@@ -2428,7 +2428,7 @@ class GreaterNode extends BinaryExpNode {
         if (error) {
             return new ErrorType();
         }
-        return new IntType();
+        return new BoolType();
     }
 
     public int lineNum() {
@@ -2469,7 +2469,7 @@ class LessEqNode extends BinaryExpNode {
         if (error) {
             return new ErrorType();
         }
-        return new IntType();
+        return new BoolType();
     }
 
     public int lineNum() {
@@ -2510,7 +2510,7 @@ class GreaterEqNode extends BinaryExpNode {
         if (error) {
             return new ErrorType();
         }
-        return new IntType();
+        return new BoolType();
     }
 
     public int lineNum() {
