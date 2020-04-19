@@ -10,9 +10,7 @@ struct S {
 struct S t;
 
 int add(int a, int b) {
-	int c;
-	c = a + b;
-	return c;
+	return (a+b);
 }
 
 void doNothing() {
@@ -30,13 +28,31 @@ void doNothing() {
 		repeat(r) {
 			alwaysTrue = false;
 		}
+	}else {
+		cout << "string";
 	}
 
 	if (!alwaysFalse){}
-
+	r = 3 + r;
+	r= r * r;
+	r = 3 / r;
+	r = 4-r;
 	t.b = 3;
-	t.r = add(t.b,t.b);
+	t.r = add(t.b,t.b) + 2;
 	if (t.c == true) {}
+	if (3 == 2) {}
+	testBool = (3 < 2);
+	if ( 3 > 2) {}
+	if (3 >= 2) {}
+	if (3 <= 2) {}
+	if (3 != 2) {}
+	
+	cin >> r;
+	cin >> alwaysTrue;
+	
+	cout << t.b;
+	cout << t.c;
+	cout << "string";
 }
 
 

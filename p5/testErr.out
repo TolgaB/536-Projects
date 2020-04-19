@@ -25,7 +25,7 @@ void main() {
     cout << f(int,bool->void);
     cout << S(struct);
     cout << t(S);
-    cout << f(int,bool->void)();
+    cout << f(int,bool->void)(1, true);
     cin >> f(int,bool->void);
     cin >> S(struct);
     cin >> t(S);

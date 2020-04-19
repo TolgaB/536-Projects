@@ -8,9 +8,7 @@ struct S{
 
 struct S t;
 int add(int a, int b) {
-    int c;
-    c(int) = (a(int) + b(int));
-    return c(int);
+    return (a(int) + b(int));
 }
 
 void doNothing() {
@@ -29,11 +27,30 @@ void doNothing() {
             alwaysTrue(bool) = false;
         }
     }
+    else {
+        cout << "string";
+    }
     if ((!alwaysFalse(bool))) {
     }
     t(S).b(int) = 3;
-    t(S).r(int) = add(int,int->int)(t(S).b(int), t(S).b(int));
+    t(S).r(int) = (add(int,int->int)(t(S).b(int), t(S).b(int)) + 2);
     if ((t(S).c(bool) == true)) {
     }
+    if ((3 == 2)) {
+    }
+    testBool(bool) = (3 < 2);
+    if ((3 > 2)) {
+    }
+    if ((3 >= 2)) {
+    }
+    if ((3 <= 2)) {
+    }
+    if ((3 != 2)) {
+    }
+    cin >> r(int);
+    cin >> alwaysTrue(bool);
+    cout << t(S).b(int);
+    cout << t(S).c(bool);
+    cout << "string";
 }
 

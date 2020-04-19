@@ -28,7 +28,7 @@ void main() {
 	//should throw an Attempt to write a struct variable error
 	cout << t;
 	//should throw an attempt to write void error
-	cout << f();
+	cout << f(1,true);
 	//throw attempt to read a function
 	cin >> f;
 	//throw attempt to read a struct name
