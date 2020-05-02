@@ -2625,7 +2625,6 @@ class MinusNode extends ArithmeticExpNode {
     }
     
     public void codeGen() {
-        //first put left arg onto the stack
         myExp1.codeGen();
         myExp2.codeGen();
         Codegen.genPop(Codegen.A0);
@@ -2651,7 +2650,13 @@ class TimesNode extends ArithmeticExpNode {
     }
 
     public void codeGen() {
-
+        myExp1.codeGen();
+        myExp2.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("move", Codegen.T0, Codegen.A0);
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("mult", Codegen.A0, Codegen.A0, Codegen.T0);
+        Codegen.genPush(Codegen.A0);
     }
 
 }
@@ -2668,6 +2673,17 @@ class DivideNode extends ArithmeticExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void codeGen() {
+        myExp1.codeGen();
+        myExp2.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("move", Codegen.T0, Codegen.A0);
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("div", Codegen.A0, Codegen.A0, Codegen.T0);
+        Codegen.genPush(Codegen.A0);
+    }
+
 }
 
 class AndNode extends LogicalExpNode {
