@@ -1078,6 +1078,13 @@ class PostIncStmtNode extends StmtNode {
         p.println("++;");
     }
 
+    public void codeGen() {
+        myExp.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("addi", Codegen.A0, Codegen.A0, "1");
+        Codegen.genPush(Codegen.A0);
+    }
+
     // 1 kid
     private ExpNode myExp;
 }
@@ -1111,6 +1118,13 @@ class PostDecStmtNode extends StmtNode {
         addIndentation(p, indent);
         myExp.unparse(p, 0);
         p.println("--;");
+    }
+
+    public void codeGen() {
+        myExp.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("subi", Codegen.A0, Codegen.A0, "1");
+        Codegen.genPush(Codegen.A0);
     }
 
     // 1 kid
