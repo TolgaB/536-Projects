@@ -1458,7 +1458,7 @@ class WhileStmtNode extends StmtNode {
         Codegen.generate("beqz", Codegen.A0, falseLabel);
         myStmtList.setFuncName(funcName);
         myStmtList.codeGen();
-        Codegen.genLabel("j", repeat);
+        Codegen.generate("j", repeat);
         
         //falselabel here
         Codegen.genLabel(falseLabel);
