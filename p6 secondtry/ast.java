@@ -2160,9 +2160,10 @@ class AssignNode extends ExpNode {
         myExp.codeGen();
         Codegen.genPop(Codegen.A0);
         if (((IdNode)myLhs).sym().getOffset() == 1) {
-            Codegen.generate("lw", Codegen.A0, "_"+((IdNode) myLhs).name());
+         //   Codegen.generate("lw", Codegen.A0, "_"+((IdNode) myLhs).name());
+            Codegen.generate("sw", Codegen.A0, "_"+((IdNode) myLhs).name());
         } else {
-            Codegen.generate("lw", Codegen.A0, String.valueOf(((IdNode)myLhs).sym().getOffset())+"($fp)");
+            Codegen.generate("sw", Codegen.A0, String.valueOf(((IdNode)myLhs).sym().getOffset())+"($fp)");
         }
     }
 
@@ -2601,10 +2602,10 @@ class PlusNode extends ArithmeticExpNode {
 
     public void codeGen() {
         //first put left arg onto the stack
+        myExp1.codeGen();
         myExp2.codeGen();
         Codegen.genPop(Codegen.A0);
         Codegen.generate("move", Codegen.T0, Codegen.A0);
-        myExp1.codeGen();
         Codegen.genPop(Codegen.A0);
         Codegen.generate("add", Codegen.A0, Codegen.A0, Codegen.T0);
         Codegen.genPush(Codegen.A0);
