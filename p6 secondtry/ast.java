@@ -818,7 +818,8 @@ class FormalDeclNode extends DeclNode {
 	      }
 
         //need to get the offset depending on which number param this is
-        sym.setOffset(numFormal * 4);
+        sym.setOffset(numFormal * -4);
+        System.out.println("set formal to offset:" + sym.getOffset());
         return sym;
     }
 
