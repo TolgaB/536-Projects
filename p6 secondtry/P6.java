@@ -49,11 +49,14 @@ public class P6 {
 		}
 
 		try {
+			Codegen.p = new PrintWriter(args[1]);
 			setInfile(args[0]);
 			setOutfile(args[1]);
 		} catch(BadInfileException e) {
 			pukeAndDie(e.getMessage());
 		} catch(BadOutfileException e) {
+			pukeAndDie(e.getMessage());
+		} catch (Exception e) {
 			pukeAndDie(e.getMessage());
 		}
 	}
@@ -164,6 +167,8 @@ public class P6 {
 		//////////////////////////
 		// TODO: Calling codeGen   //
 		//////////////////////////
+		astRoot.codeGen();
+		Codegen.p.close();
 
 		return P6.RESULT_CORRECT;
 	}
