@@ -830,6 +830,7 @@ class FormalDeclNode extends DeclNode {
     }
 
     public void addNumFormal() {
+        System.out.println("addNumFormal called");
         numFormal++;
     }
     // 2 kids
