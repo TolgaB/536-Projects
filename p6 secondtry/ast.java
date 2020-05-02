@@ -1128,11 +1128,18 @@ class PostDecStmtNode extends StmtNode {
     }
 
     public void codeGen() {
-        myExp.codeGen();
-        Codegen.genPop(Codegen.A0);
-        Codegen.generate("li", Codegen.T0, "1");
-        Codegen.generate("sub", Codegen.A0, Codegen.A0, Codegen.T0);
-        Codegen.genPush(Codegen.A0);
+        if (((IdNode) myExp).sym().getOffset() == 1) {
+            //global
+            Codegen.generate("lw", Codegen.T0, "_"+((IdNode) myExp).name());
+            Codegen.generate("li", Codegen.T1, "1");
+            Codegen.generate("sub", Codegen.T0, Codegen.T0, Codegen.T1);    
+            Codegen.generate("sw", Codegen.T0, "_"+((IdNode) myExp).name());
+        } else {
+            Codegen.generate("lw", Codegen.T0, String.valueOf(((IdNode) myExp).sym().getOffset())+"($fp)");
+            Codegen.generate("li", Codegen.T1, "1");
+            Codegen.generate("sub", Codegen.T0, Codegen.T0, Codegen.T1);    
+            Codegen.generate("sw", Codegen.T0, String.valueOf(((IdNode) myExp).sym().getOffset())+"($fp)");
+         }
     }
 
     // 1 kid
