@@ -189,7 +189,7 @@ class DeclListNode extends ASTnode {
         for (DeclNode node : myDecls) {
             if (node instanceof VarDeclNode) {
                 ((VarDeclNode)node).nameAnalysis(symTab, globalTab);
-                localOffset++;
+                localOffset = localOffset + 4;
             } else {
                 node.nameAnalysis(symTab);
             }
