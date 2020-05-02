@@ -17,6 +17,7 @@ import java_cup.runtime.*;
 public class P6 {
 	FileReader inFile;
 	private PrintWriter outFile;
+	private PrintWriter testOutFile;
 	private static PrintStream outStream = System.err;
 
 	public static final int RESULT_CORRECT = 0;
@@ -76,6 +77,7 @@ public class P6 {
 	public void setOutfile(String filename) throws BadOutfileException{
 		try {
 			outFile = new PrintWriter(filename);
+			testOutFile  = new PrintWriter("wumbo.out");
 		} catch (FileNotFoundException ex) {
 			throw new BadOutfileException(ex, filename);
 		}
@@ -155,6 +157,7 @@ public class P6 {
 			return P6.RESULT_TYPE_ERROR;
 		}
 
+		astRoot.unparse(testOutFile, 0);
 		//////////////////////////
 		// TODO: Calling codeGen   //
 		//////////////////////////
