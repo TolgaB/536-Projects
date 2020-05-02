@@ -246,11 +246,12 @@ class FormalsListNode extends ASTnode {
     public List<Type> nameAnalysis(SymTable symTab) {
         List<Type> typeList = new LinkedList<Type>();
         for (FormalDeclNode node : myFormals) {
+            node.setNumFormal(numFormal);
             Sym sym = node.nameAnalysis(symTab);
             if (sym != null) {
                 typeList.add(sym.getType());
             }
-            node.addNumFormal();
+            numFormal++;
         }
         return typeList;
     }
@@ -275,6 +276,7 @@ class FormalsListNode extends ASTnode {
 
     // list of kids (FormalDeclNodes)
     private List<FormalDeclNode> myFormals;
+    private int numFormal;
 }
 
 class FnBodyNode extends ASTnode {
@@ -829,9 +831,8 @@ class FormalDeclNode extends DeclNode {
         p.print(myId.name());
     }
 
-    public void addNumFormal() {
-        numFormal++;
-        System.out.println("addNumFormal called:" +numFormal);
+    public void setNumFormal(int numFormal) {
+       this.numFormal = numFormal;
     }
     // 2 kids
     private TypeNode myType;
