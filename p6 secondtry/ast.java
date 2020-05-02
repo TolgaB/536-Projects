@@ -706,6 +706,8 @@ class FnDeclNode extends DeclNode {
         Codegen.generate("lw", Codegen.RA, "-"+String.valueOf(paramSize)+"($fp)");
         Codegen.generate("move", Codegen.T0, Codegen.FP);
         Codegen.generate("lw", Codegen.FP, "-"+String.valueOf(paramSize+4)+"($fp)");
+
+
         Codegen.generate("move", Codegen.SP, Codegen.T0);
         Codegen.generate("jr", Codegen.RA);
 
@@ -1159,7 +1161,7 @@ class WriteStmtNode extends StmtNode {
         p.println(";");
     }
 
-    public void CodeGen() {
+    public void codeGen() {
         System.out.println("code gen called on write");
         Type expType = myExp.typeCheck();
         //generate code to evaluate the expression, leaving that value on top of stack
