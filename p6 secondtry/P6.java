@@ -102,6 +102,9 @@ public class P6 {
 			// written to the stream, force it out.
 			outFile.flush();
 			outFile.close();
+
+			testOutFile.flush();
+			testOutFile.close();
 		}
 	}
 

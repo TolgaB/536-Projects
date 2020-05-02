@@ -1,0 +1,5 @@
+int r;
+void func(int e) {
+int a;
+int b;
+}
