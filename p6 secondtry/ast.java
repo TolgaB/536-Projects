@@ -2796,6 +2796,15 @@ class LessNode extends RelationalExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+    public void codeGen() {
+        myExp1.codeGen();
+        myExp2.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("move", Codegen.T0, Codegen.A0);
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("sle", Codegen.A0, Codegen.A0, Codegen.T0);
+        Codegen.genPush(Codegen.A0);
+    }
 }
 
 class GreaterNode extends RelationalExpNode {
@@ -2809,6 +2818,15 @@ class GreaterNode extends RelationalExpNode {
         p.print(" > ");
         myExp2.unparse(p, 0);
         p.print(")");
+    }
+    public void codeGen() {
+        myExp1.codeGen();
+        myExp2.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("move", Codegen.T0, Codegen.A0);
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("sgt", Codegen.A0, Codegen.A0, Codegen.T0);
+        Codegen.genPush(Codegen.A0);
     }
 }
 
