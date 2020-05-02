@@ -582,7 +582,7 @@ class VarDeclNode extends DeclNode {
         //only needed if global var
         if (myId.sym().getOffset() == 1) {
             Codegen.generate(".data");
-            Codegen.generate(".align", "2");
+            Codegen.generate(".align ", "2");
             Codegen.generate("_"+myId.name(), ".space", "4");
         }
     }
@@ -2649,6 +2649,11 @@ class TimesNode extends ArithmeticExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void codeGen() {
+
+    }
+
 }
 
 class DivideNode extends ArithmeticExpNode {
