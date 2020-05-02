@@ -730,7 +730,7 @@ class FnDeclNode extends DeclNode {
 
         //exit
        
-        Codegen.genLabel("_"+myId.name()+"_"+"Exit:");
+        Codegen.genLabel("_"+myId.name()+"_"+"Exit");
         Codegen.generate("lw", Codegen.RA, "-"+String.valueOf(paramSize)+"($fp)");
         Codegen.generate("move", Codegen.T0, Codegen.FP);
         Codegen.generate("lw", Codegen.FP, "-"+String.valueOf(paramSize+4)+"($fp)");
