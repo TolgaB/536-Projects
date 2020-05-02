@@ -2655,7 +2655,7 @@ class TimesNode extends ArithmeticExpNode {
         Codegen.genPop(Codegen.A0);
         Codegen.generate("move", Codegen.T0, Codegen.A0);
         Codegen.genPop(Codegen.A0);
-        Codegen.generate("mult", Codegen.A0, Codegen.A0, Codegen.T0);
+        Codegen.generate("mul", Codegen.A0, Codegen.A0, Codegen.T0);
         Codegen.genPush(Codegen.A0);
     }
 
