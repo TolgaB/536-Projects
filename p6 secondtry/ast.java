@@ -678,7 +678,7 @@ class FnDeclNode extends DeclNode {
          //check if main func
          if (myId.name().equals("main")) {
             Codegen.generate(".text");
-            Codegen.generate(".globl", "main");
+            Codegen.generate(".globl ", "main");
             Codegen.generate("main:");
             Codegen.generate("__start:");
         } else {
@@ -692,8 +692,8 @@ class FnDeclNode extends DeclNode {
         Codegen.genPush(Codegen.FP);
         //set the fp
         //need to find size of params in bytes + 8
-        int paramSize = (myFormalsList.length() * 4) + 8;
-        Codegen.generate("addu", Codegen.FP, Codegen.SP, String.valueOf(paramSize));
+        int paramSize = (myFormalsList.length() * 4);
+        Codegen.generate("addu", Codegen.FP, Codegen.SP, String.valueOf(paramSize+8));
         //push space for locals
         int localOffset = myBody.getLocalOffset();
         Codegen.generate("subu", Codegen.SP, Codegen.SP, String.valueOf(localOffset));
