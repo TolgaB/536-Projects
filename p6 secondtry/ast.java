@@ -1683,8 +1683,9 @@ class IntLitNode extends ExpNode {
 
     public void codeGen() {
         Codegen.generate("li", Codegen.T0, String.valueOf(myIntVal));
-        Codegen.generate("sw", Codegen.T0, "($sp)");
-        Codegen.generate("subu", "$sp", "$sp", 4);
+        Codegen.genPush(Codegen.T0);
+     //   Codegen.generate("sw", Codegen.T0, "($sp)");
+     //   Codegen.generate("subu", "$sp", "$sp", 4);
     }
 
     private int myLineNum;
@@ -1730,8 +1731,9 @@ class StringLitNode extends ExpNode {
         Codegen.generateLabeled(lbl, ".asciiz " + myStrVal, "");
         Codegen.generate(".text");
         Codegen.generate("la", Codegen.T0, lbl);
-        Codegen.generate("sw", Codegen.T0, "($sp)");
-        Codegen.generate("subu", "$sp", "$sp", "4");        
+        Codegen.genPush(Codegen.T0);
+     //   Codegen.generate("sw", Codegen.T0, "($sp)");
+     //   Codegen.generate("subu", "$sp", "$sp", "4");        
 
     }
 
