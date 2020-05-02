@@ -134,7 +134,7 @@ class ProgramNode extends ASTnode {
     public void nameAnalysis() {
         SymTable symTab = new SymTable();
         myDeclList.nameAnalysis(symTab);
-        
+
         //look to see if there is a main func
         Sym mainFuncSym = null;
         try {
@@ -311,15 +311,23 @@ class FnBodyNode extends ASTnode {
     }
 
     public void codeGen() {
+        myStmtList.setFuncName(funcName);
         myStmtList.codeGen();
     }
 
+    public void setFuncName(String funcName) {
+        this.funcName = funcName;
+    }
+    private String funcName;
     // 2 kids
     private DeclListNode myDeclList;
     private StmtListNode myStmtList;
 }
 
 class StmtListNode extends ASTnode {
+
+
+
     public StmtListNode(List<StmtNode> S) {
         myStmts = S;
     }
@@ -353,12 +361,18 @@ class StmtListNode extends ASTnode {
     public void codeGen() {
         for (StmtNode tempNode: myStmts) {
             System.out.println("called codegen on stmt");
+            tempNode.setFuncName(funcName);
             tempNode.codeGen();
         }
     }
 
+    public void setFuncName(String funcName) {
+        this.funcName = funcName;
+    }
+
     // list of kids (StmtNodes)
     private List<StmtNode> myStmts;
+    private String funcName;
 }
 
 class ExpListNode extends ASTnode {
@@ -711,16 +725,24 @@ class FnDeclNode extends DeclNode {
         Codegen.generate("subu", Codegen.SP, Codegen.SP, String.valueOf(localOffset));
         //func body
         //only call codeGen on stmtlistnode
+        myBody.setFuncName(myId.name());
         myBody.codeGen();
 
         //exit
+       
+        Codegen.genLabel("_"+myId.name()+"_"+"Exit:");
         Codegen.generate("lw", Codegen.RA, "-"+String.valueOf(paramSize)+"($fp)");
         Codegen.generate("move", Codegen.T0, Codegen.FP);
         Codegen.generate("lw", Codegen.FP, "-"+String.valueOf(paramSize+4)+"($fp)");
-
-
-        Codegen.generate("move", Codegen.SP, Codegen.T0);
-        Codegen.generate("jr", Codegen.RA);
+        if (myId.name().equals("main")) {
+            Codegen.generate("li", Codegen.V0, "10");
+            Codegen.generate("syscall");
+        }
+        else {
+            Codegen.generate("move", Codegen.SP, Codegen.T0);
+            Codegen.generate("jr", Codegen.RA);
+        }
+        
 
     }
 
@@ -973,6 +995,10 @@ abstract class StmtNode extends ASTnode {
     abstract public void nameAnalysis(SymTable symTab);
     abstract public void typeCheck(Type retType);
     public void codeGen() {}
+    String funcName;
+    public void setFuncName(String funcName) {
+        this.funcName = funcName;
+    }
 }
 
 class AssignStmtNode extends StmtNode {
@@ -1246,6 +1272,18 @@ class IfStmtNode extends StmtNode {
         p.println("}");
     }
 
+    public void codeGen() {
+        myExp.codeGen();
+        Codegen.genPop(Codegen.A0);
+        String falseLabel = Codegen.nextLabel();
+        //jump to falselabel if T0 == false
+        Codegen.generate("beqz", Codegen.A0, falseLabel);
+        myStmtList.setFuncName(funcName);
+        myStmtList.codeGen();
+        //falselabel here
+        Codegen.genLabel(falseLabel, "");
+    }
+
     // e kids
     private ExpNode myExp;
     private DeclListNode myDeclList;
@@ -1330,6 +1368,23 @@ class IfElseStmtNode extends StmtNode {
         p.println("}");
     }
 
+    public void codeGen() {
+        myExp.codeGen();
+        Codegen.genPop(Codegen.A0);
+        String falseLabel = Codegen.nextLabel();
+        String afterElseLabel = Codegen.nextLabel();
+        //jump to falselabel if T0 == false
+        Codegen.generate("beqz", Codegen.A0, falseLabel);
+        myThenStmtList.setFuncName(funcName);
+        myThenStmtList.codeGen();
+        Codegen.generate("j", afterElseLabel);
+        //falselabel here
+        Codegen.genLabel(falseLabel);
+        myElseStmtList.setFuncName(funcName);
+        myElseStmtList.codeGen();
+        Codegen.genLabel(afterElseLabel);
+    }
+
     // 5 kids
     private ExpNode myExp;
     private DeclListNode myThenDeclList;
@@ -1390,6 +1445,25 @@ class WhileStmtNode extends StmtNode {
         myStmtList.unparse(p, indent+4);
         addIndentation(p, indent);
         p.println("}");
+    }
+
+    public void codeGen() {
+        String repeat = Codegen.nextLabel();
+        Codegen.genLabel(repeat);
+
+        myExp.codeGen();
+        Codegen.genPop(Codegen.A0);
+        String falseLabel = Codegen.nextLabel();
+        
+        //jump to falselabel if T0 == false
+        Codegen.generate("beqz", Codegen.A0, falseLabel);
+        myStmtList.setFuncName(funcName);
+        myStmtList.codeGen();
+        Codegen.genLabel("j", repeat);
+        
+        //falselabel here
+        Codegen.genLabel(falseLabel);
+        
     }
 
     // 3 kids
@@ -1485,6 +1559,9 @@ class CallStmtNode extends StmtNode {
         p.println(";");
     }
 
+    public void codeGen() {
+        myCall.codeGen();
+    }
     // 1 kid
     private CallExpNode myCall;
 }
@@ -1539,6 +1616,15 @@ class ReturnStmtNode extends StmtNode {
             myExp.unparse(p, 0);
         }
         p.println(";");
+    }
+
+    public void codeGen() {
+        
+        myExp.codeGen();
+        //put it into the v0 register and jump
+        Codegen.genPop(Codegen.V0);
+        Codegen.generate("j", "_"+funcName+"_Exit");
+        
     }
 
     // 1 kid
