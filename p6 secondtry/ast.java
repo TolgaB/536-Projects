@@ -1188,6 +1188,17 @@ class ReadStmtNode extends StmtNode {
         p.println(";");
     }
 
+    public void codeGen() {
+        Codegen.generate("li", Codegen.V0, "5");
+        Codegen.generate("syscall");
+        if (((IdNode) myExp).sym().getOffset() == 1) {
+            //global   
+            Codegen.generate("sw", Codegen.V0, "_"+((IdNode) myExp).name());
+        } else {  
+            Codegen.generate("sw", Codegen.V0, String.valueOf(((IdNode) myExp).sym().getOffset())+"($fp)");
+         }
+    }
+
     // 1 kid (actually can only be an IdNode or an ArrayExpNode)
     private ExpNode myExp;
 }
