@@ -1123,7 +1123,8 @@ class PostDecStmtNode extends StmtNode {
     public void codeGen() {
         myExp.codeGen();
         Codegen.genPop(Codegen.A0);
-        Codegen.generate("subi", Codegen.A0, Codegen.A0, "1");
+        Codegen.generate("li", Codegen.T0, "1");
+        Codegen.generate("sub", Codegen.A0, Codegen.A0, Codegen.T0);
         Codegen.genPush(Codegen.A0);
     }
 
