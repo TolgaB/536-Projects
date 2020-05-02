@@ -583,7 +583,7 @@ class VarDeclNode extends DeclNode {
         if (myId.sym().getOffset() == 1) {
             Codegen.generate(".data");
             Codegen.generate(".align ", "2");
-            Codegen.generateLabeled("_"+myId.name(), ".space 4", "");
+            Codegen.generate("_"+myId.name()+": .space 4");
         }
     }
 
