@@ -341,6 +341,7 @@ class StmtListNode extends ASTnode {
 
     public void codeGen() {
         for (StmtNode tempNode: myStmts) {
+            System.out.println("called codegen on stmt");
             tempNode.codeGen();
         }
     }
@@ -1159,6 +1160,7 @@ class WriteStmtNode extends StmtNode {
     }
 
     public void CodeGen() {
+        System.out.println("code gen called on write");
         Type expType = myExp.typeCheck();
         //generate code to evaluate the expression, leaving that value on top of stack
         myExp.codeGen();
