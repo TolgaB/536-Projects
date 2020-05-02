@@ -250,6 +250,7 @@ class FormalsListNode extends ASTnode {
             if (sym != null) {
                 typeList.add(sym.getType());
             }
+            node.addNumFormal();
         }
         return typeList;
     }
@@ -816,6 +817,8 @@ class FormalDeclNode extends DeclNode {
             }
 	      }
 
+        //need to get the offset depending on which number param this is
+        sym.setOffset(numFormal * 4);
         return sym;
     }
 
@@ -825,9 +828,13 @@ class FormalDeclNode extends DeclNode {
         p.print(myId.name());
     }
 
+    public void addNumFormal() {
+        numFormal++;
+    }
     // 2 kids
     private TypeNode myType;
     private IdNode myId;
+    private int numFormal;
 }
 
 class StructDeclNode extends DeclNode {
