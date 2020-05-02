@@ -1206,7 +1206,6 @@ class WriteStmtNode extends StmtNode {
         Codegen.genPop(Codegen.A0);
         if (expType.isIntType() || expType.isBoolType()){
             Codegen.generate("li", Codegen.V0, "1");
-            Codegen.generate("syscall");
         }
         if (expType.isStringType()) {
             Codegen.generate("li", Codegen.V0, "4");
