@@ -2698,6 +2698,17 @@ class AndNode extends LogicalExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void codeGen() {
+        myExp1.codeGen();
+        myExp2.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("move", Codegen.T0, Codegen.A0);
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("and", Codegen.A0, Codegen.A0, Codegen.T0);
+        Codegen.genPush(Codegen.A0);
+    }
+
 }
 
 class OrNode extends LogicalExpNode {
@@ -2712,6 +2723,17 @@ class OrNode extends LogicalExpNode {
         myExp2.unparse(p, 0);
         p.print(")");
     }
+
+    public void codeGen() {
+        myExp1.codeGen();
+        myExp2.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("move", Codegen.T0, Codegen.A0);
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("or", Codegen.A0, Codegen.A0, Codegen.T0);
+        Codegen.genPush(Codegen.A0);
+    }
+
 }
 
 class EqualsNode extends EqualityExpNode {
