@@ -2626,12 +2626,12 @@ class MinusNode extends ArithmeticExpNode {
     
     public void codeGen() {
         //first put left arg onto the stack
+        myExp1.codeGen();
         myExp2.codeGen();
         Codegen.genPop(Codegen.A0);
         Codegen.generate("move", Codegen.T0, Codegen.A0);
-        myExp1.codeGen();
         Codegen.genPop(Codegen.A0);
-        Codegen.generate("sub", Codegen.A0, Codegen.T0, Codegen.A0);
+        Codegen.generate("sub", Codegen.A0, Codegen.A0, Codegen.T0);
         Codegen.genPush(Codegen.A0);
     }
 }
