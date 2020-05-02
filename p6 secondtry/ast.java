@@ -1079,10 +1079,17 @@ class PostIncStmtNode extends StmtNode {
     }
 
     public void codeGen() {
-        myExp.codeGen();
-        Codegen.genPop(Codegen.A0);
-        Codegen.generate("addi", Codegen.A0, Codegen.A0, "1");
-        Codegen.genPush(Codegen.A0);
+        //need to actually change the value stored on the stack
+       if (((IdNode) myExp).sym().getOffset() == 1) {
+           //global
+           Codegen.generate("lw", Codegen.T0, "_"+((IdNode) myExp).name());
+           Codegen.generate("addi", Codegen.T0, Codegen.T0, "1");
+           Codegen.generate("sw", Codegen.T0, "_"+((IdNode) myExp).name());
+       } else {
+           Codegen.generate("lw", Codegen.T0, String.valueOf(((IdNode) myExp).sym().getOffset())+"($fp)");
+           Codegen.generate("addi", Codegen.T0, Codegen.T0, "1");
+           Codegen.generate("sw", Codegen.T0, String.valueOf(((IdNode) myExp).sym().getOffset())+"($fp)");
+        }
     }
 
     // 1 kid
