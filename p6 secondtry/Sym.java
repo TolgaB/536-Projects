@@ -5,8 +5,8 @@ import java.util.*;
  * Each Sym contains a type (a Type).
  */
 public class Sym {
-    private int offSet;
     private Type type;
+    private int offSet;
 
     public Sym(Type type) {
         this.type = type;
@@ -20,14 +20,13 @@ public class Sym {
         return type.toString();
     }
 
-    public int getOffset() {
-        return offSet;
-    }
-
     public void setOffset(int offSet) {
         this.offSet = offSet;
     }
 
+    public int getOffset() {
+        return offSet;
+    }
 }
 
 /**
@@ -40,7 +39,6 @@ class FnSym extends Sym {
     private Type returnType;
     private int numParams;
     private List<Type> paramTypes;
-    private int numLocals;
 
     public FnSym(Type type, int numparams) {
         super(new FnType());
@@ -62,14 +60,6 @@ class FnSym extends Sym {
 
     public List<Type> getParamTypes() {
         return paramTypes;
-    }
-
-    public void setNumLocal(int numLocals) {
-        this.numLocals = numLocals;
-    }
-
-    public int getNumLocal() {
-        return numLocals;
     }
 
     public String toString() {

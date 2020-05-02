@@ -155,11 +155,6 @@ public class P6 {
 			return P6.RESULT_TYPE_ERROR;
 		}
 
-		Codegen.p = new PrintWriter(args[1]);
-		astRoot.codeGen();
-		Codegen.p.close();
-
-
 		//////////////////////////
 		// TODO: Calling codeGen   //
 		//////////////////////////

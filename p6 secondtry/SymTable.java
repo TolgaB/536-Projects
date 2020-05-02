@@ -2,15 +2,15 @@ import java.util.*;
 
 public class SymTable {
 
-  private int currScopeDepth;
-  private int offSet;
-
 
   private List<HashMap<String, Sym>> list;
+  public int offSet;
+  private int scopeDepth;
 
   public SymTable() {
     list = new LinkedList<HashMap<String, Sym>>();
     list.add(new HashMap<String, Sym>());
+    scopeDepth = 0;
   }
 
   public void addDecl(String name, Sym sym) throws DuplicateSymException,
@@ -38,7 +38,7 @@ public class SymTable {
 
   public void addScope() {
     list.add(0, new HashMap<String, Sym>());
-    currScopeDepth++;
+    scopeDepth++;
   }
 
   public Sym lookupLocal(String name) throws EmptySymTableException {
@@ -71,7 +71,7 @@ public class SymTable {
       throw new EmptySymTableException();
     }
     list.remove(0);
-    currScopeDepth--;
+    scopeDepth--;
   }
 
   public void print() {
@@ -82,15 +82,7 @@ public class SymTable {
     System.out.println();
   }
 
-  public int getScopeDepth() {
-    return currScopeDepth;
-  }
-
-  public void setSymTOffset(int newOffset) {
-     offSet = newOffset;
-  }
-
-  public int getSymTOffset() {
-    return offSet;
+  public int getDepth() {
+    return scopeDepth;
   }
 }
