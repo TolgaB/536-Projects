@@ -659,6 +659,8 @@ class FnDeclNode extends DeclNode {
         if (symTab.getDepth() == 0) {
             //we know it is a global func
             sym.setOffset(1);
+            //need to reset the symTab offset or other global funcs will be wonky
+            symTab.offSet = 0;
         }
         symTab.addScope();  // add a new scope for locals and params
 
