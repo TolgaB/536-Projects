@@ -2368,6 +2368,14 @@ class UnaryMinusNode extends UnaryExpNode {
         myExp.unparse(p, 0);
         p.print(")");
     }
+
+    public void codeGen() {
+        myExp.codeGen();
+        Codegen.genPop(Codegen.A0);
+        Codegen.generate("li", Codegen.T0, 0);
+        Codegen.generate("subu", Codegen.A0, Codegen.T0, Codegen.A0);
+        Codegen.genPush(Codegen.A0);
+    }
 }
 
 class NotNode extends UnaryExpNode {
@@ -2400,6 +2408,26 @@ class NotNode extends UnaryExpNode {
         myExp.unparse(p, 0);
         p.print(")");
     }
+
+    public void codeGen() {
+        myExp.codeGen();
+        Codegen.genPop(Codegen.A0);
+        String pushOneLabel = Codegen.nextLabel();
+        String exitLabel = Codegen.nextLabel();
+        //need to push 1 if 0 and 0 if 1
+        Codegen.generate("beqz", Codegen.A0, pushOneLabel);
+        Codegen.generate("li", Codegen.T0, 0);
+        Codegen.genPush(Codegen.T0);
+        Codegen.generate("j", exitLabel);
+
+        Codegen.genLabel(pushOneLabel);
+        Codegen.generate("li", Codegen.T0, 1);
+        Codegen.genPush(Codegen.T0);
+
+        Codegen.genLabel(exitLabel);
+
+    }
+
 }
 
 // **********************************************************************
