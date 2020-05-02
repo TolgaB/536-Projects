@@ -208,7 +208,7 @@ class DeclListNode extends ASTnode {
 
     public void codeGen() {
         for (DeclNode tempNode: myDecls) {
-            tempNode.genCode();
+            tempNode.codeGen();
         }
     }
 
