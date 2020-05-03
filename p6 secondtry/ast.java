@@ -1783,9 +1783,12 @@ class StringLitNode extends ExpNode {
         Codegen.generate(".text");
         Codegen.generate("la", Codegen.T0, lbl);
         Codegen.genPush(Codegen.T0);
-     //   Codegen.generate("sw", Codegen.T0, "($sp)");
-     //   Codegen.generate("subu", "$sp", "$sp", "4");        
+        
 
+    }
+
+    public String getStrVal() {
+        return myStrVal;
     }
 
     private int myLineNum;
@@ -2826,13 +2829,23 @@ class NotEqualsNode extends EqualityExpNode {
         p.print(")");
     }
     public void codeGen() {
-        myExp1.codeGen();
-        myExp2.codeGen();
-        Codegen.genPop(Codegen.A0);
-        Codegen.generate("move", Codegen.T0, Codegen.A0);
-        Codegen.genPop(Codegen.A0);
-        Codegen.generate("sne", Codegen.A0, Codegen.A0, Codegen.T0);
-        Codegen.genPush(Codegen.A0);
+        if (myExp1 instanceof StringLitNode) {
+            if (((StringLitNode) myExp1).getStrVal().equals(((StringLitNode) myExp2).getStrVal())) {
+                Codegen.generate("li", Codegen.T0, "1");
+            }
+            else {
+                Codegen.generate("li", Codegen.T0, "0");
+            }
+            Codegen.genPush(Codegen.T0);
+        } else {
+            myExp1.codeGen();
+            myExp2.codeGen();
+            Codegen.genPop(Codegen.A0);
+            Codegen.generate("move", Codegen.T0, Codegen.A0);
+            Codegen.genPop(Codegen.A0);
+            Codegen.generate("sne", Codegen.A0, Codegen.A0, Codegen.T0);
+            Codegen.genPush(Codegen.A0);
+        }
     }
 }
 
