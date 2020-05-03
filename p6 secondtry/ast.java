@@ -2752,13 +2752,23 @@ class AndNode extends LogicalExpNode {
     }
 
     public void codeGen() {
+        String failedLbl = Codegen.nextLabel();
+        String workedLbl = Codegen.nextLabel();
         myExp1.codeGen();
-        myExp2.codeGen();
         Codegen.genPop(Codegen.A0);
         Codegen.generate("move", Codegen.T0, Codegen.A0);
+        Codegen.generate("beqz", Codegen.T0, failedLbl);
+
+        myExp2.codeGen();
         Codegen.genPop(Codegen.A0);
         Codegen.generate("and", Codegen.A0, Codegen.A0, Codegen.T0);
         Codegen.genPush(Codegen.A0);
+        Codegen.generate("j", workedLbl);
+
+        //go here if fail
+        Codegen.genLabel(failedLbl);
+        Codegen.genPush(Codegen.T0);
+        Codegen.genLabel(workedLbl);
     }
 
 }
