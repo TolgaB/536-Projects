@@ -105,8 +105,6 @@ public class P6 {
 			outFile.flush();
 			outFile.close();
 
-			testOutFile.flush();
-			testOutFile.close();
 		}
 	}
 
