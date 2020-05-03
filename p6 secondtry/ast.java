@@ -2802,13 +2802,23 @@ class EqualsNode extends EqualityExpNode {
     }
 
     public void codeGen() {
-        myExp1.codeGen();
-        myExp2.codeGen();
-        Codegen.genPop(Codegen.A0);
-        Codegen.generate("move", Codegen.T0, Codegen.A0);
-        Codegen.genPop(Codegen.A0);
-        Codegen.generate("seq", Codegen.A0, Codegen.A0, Codegen.T0);
-        Codegen.genPush(Codegen.A0);
+        if (myExp1 instanceof StringLitNode) {
+            if (((StringLitNode) myExp1).getStrVal().equals(((StringLitNode) myExp2).getStrVal())) {
+                Codegen.generate("li", Codegen.T0, "1");
+            }
+            else {
+                Codegen.generate("li", Codegen.T0, "0");
+            }
+            Codegen.genPush(Codegen.T0);
+        } else {
+            myExp1.codeGen();
+            myExp2.codeGen();
+            Codegen.genPop(Codegen.A0);
+            Codegen.generate("move", Codegen.T0, Codegen.A0);
+            Codegen.genPop(Codegen.A0);
+            Codegen.generate("seq", Codegen.A0, Codegen.A0, Codegen.T0);
+            Codegen.genPush(Codegen.A0);
+        }
     }
 
 }
@@ -2829,14 +2839,13 @@ class NotEqualsNode extends EqualityExpNode {
         if (myExp1 instanceof StringLitNode) {
             System.out.println("equals string lit node!!!!!!!!!!!!!");
             if (((StringLitNode) myExp1).getStrVal().equals(((StringLitNode) myExp2).getStrVal())) {
-                Codegen.generate("li", Codegen.T0, "1");
+                Codegen.generate("li", Codegen.T0, "0");
             }
             else {
-                Codegen.generate("li", Codegen.T0, "0");
+                Codegen.generate("li", Codegen.T0, "1");
             }
             Codegen.genPush(Codegen.T0);
         } else {
-            System.out.println("Not string node!");
             myExp1.codeGen();
             myExp2.codeGen();
             Codegen.genPop(Codegen.A0);
