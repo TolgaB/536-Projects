@@ -4,13 +4,14 @@ public class SymTable {
 
 
   private List<HashMap<String, Sym>> list;
+  private int scopeDepthTracker;
   public int offSet;
-  private int scopeDepth;
+  
 
   public SymTable() {
     list = new LinkedList<HashMap<String, Sym>>();
     list.add(new HashMap<String, Sym>());
-    scopeDepth = 0;
+    scopeDepthTracker = 0;
   }
 
   public void addDecl(String name, Sym sym) throws DuplicateSymException,
@@ -38,7 +39,7 @@ public class SymTable {
 
   public void addScope() {
     list.add(0, new HashMap<String, Sym>());
-    scopeDepth++;
+    scopeDepthTracker++;
   }
 
   public Sym lookupLocal(String name) throws EmptySymTableException {
@@ -71,7 +72,7 @@ public class SymTable {
       throw new EmptySymTableException();
     }
     list.remove(0);
-    scopeDepth--;
+    scopeDepthTracker--;
   }
 
   public void print() {
@@ -83,6 +84,6 @@ public class SymTable {
   }
 
   public int getDepth() {
-    return scopeDepth;
+    return scopeDepthTracker;
   }
 }
