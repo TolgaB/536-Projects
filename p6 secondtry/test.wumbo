@@ -1,5 +1,19 @@
-int r;
-void func(int e) {
-int a;
-int b;
+int add(int a, int b) {
+	return (a+b);
 }
+void main() {
+	bool t;
+	bool f;
+	t = true;
+	f = false;
+	if ( t || f) {
+		cout << "worked";
+	} else {
+	}
+	t= false;
+	if (t || f) {
+	}else {
+		cout << "worked";
+	}
+}
+

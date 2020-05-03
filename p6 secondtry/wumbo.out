@@ -1,6 +1,22 @@
-int r1;
-void func(int e) {
-    int a-12;
-    int b-16;
+int add(int a, int b) {
+    return (a(int) + b(int));
+}
+
+void main() {
+    bool t-8;
+    bool f-12;
+    t(bool) = true;
+    f(bool) = false;
+    if ((t(bool) || f(bool))) {
+        cout << "worked";
+    }
+    else {
+    }
+    t(bool) = false;
+    if ((t(bool) || f(bool))) {
+    }
+    else {
+        cout << "worked";
+    }
 }
 
