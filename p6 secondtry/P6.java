@@ -80,7 +80,6 @@ public class P6 {
 	public void setOutfile(String filename) throws BadOutfileException{
 		try {
 			outFile = new PrintWriter(filename);
-			testOutFile  = new PrintWriter("wumbo.out");
 		} catch (FileNotFoundException ex) {
 			throw new BadOutfileException(ex, filename);
 		}
@@ -163,7 +162,6 @@ public class P6 {
 			return P6.RESULT_TYPE_ERROR;
 		}
 
-		astRoot.unparse(testOutFile, 0);
 		//////////////////////////
 		// TODO: Calling codeGen   //
 		//////////////////////////
