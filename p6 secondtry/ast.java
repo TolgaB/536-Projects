@@ -2830,6 +2830,7 @@ class NotEqualsNode extends EqualityExpNode {
     }
     public void codeGen() {
         if (myExp1 instanceof StringLitNode) {
+            System.out.println("equals string lit node!!!!!!!!!!!!!");
             if (((StringLitNode) myExp1).getStrVal().equals(((StringLitNode) myExp2).getStrVal())) {
                 Codegen.generate("li", Codegen.T0, "1");
             }
