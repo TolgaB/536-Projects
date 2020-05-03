@@ -363,7 +363,6 @@ class StmtListNode extends ASTnode {
 
     public void codeGen() {
         for (StmtNode tempNode: myStmts) {
-            System.out.println("called codegen on stmt");
             tempNode.setFuncName(funcName);
             tempNode.codeGen();
         }
@@ -821,7 +820,6 @@ class FormalDeclNode extends DeclNode {
 
         //need to get the offset depending on which number param this is
         sym.setOffset(numFormal * -4);
-        System.out.println("set formal to offset:" + sym.getOffset());
         return sym;
     }
 
@@ -1251,7 +1249,6 @@ class WriteStmtNode extends StmtNode {
     }
 
     public void codeGen() {
-        System.out.println("code gen called on write");
         Type expType = myExp.typeCheck();
         //generate code to evaluate the expression, leaving that value on top of stack
         myExp.codeGen();
@@ -2839,6 +2836,7 @@ class NotEqualsNode extends EqualityExpNode {
             }
             Codegen.genPush(Codegen.T0);
         } else {
+            System.out.println("Not string node!");
             myExp1.codeGen();
             myExp2.codeGen();
             Codegen.genPop(Codegen.A0);
